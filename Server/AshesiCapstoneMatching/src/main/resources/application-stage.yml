@@ -1,0 +1,10 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/stack-o?serverTimezone=UTC
+    username: root
+    password: B@naK!ng1
+  
+  jpa:
+    hibernate:
+      ddl-auto: update         # For in testing, modify database to suit current state of project when it is run

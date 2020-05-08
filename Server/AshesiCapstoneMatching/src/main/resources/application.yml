@@ -1,0 +1,11 @@
+server:
+  port: 9090
+  
+spring:  profiles:    active:    - dev
+    
+# EMAIL SERVICE CONFIGURATION  freemarker:    template-loader-path:    - classpath:/templates/mail
+    
+
+
+
+    

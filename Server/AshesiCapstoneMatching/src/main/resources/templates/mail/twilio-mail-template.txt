@@ -1,0 +1,82 @@
+<tr><td style="border-collapse:collapse;vertical-align:top">
+
+		<table id="m_7265280485359563667contentTable" cellpadding="0" cellspacing="0" border="0" style="background-color:#fff;margin:0 auto;width:680px;border:solid 1px #ddd;border-collapse:collapse">
+			<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+
+				<table id="m_7265280485359563667header" cellpadding="20" cellspacing="0" border="0" style="border-bottom:solid 1px #ddd;width:100%;border-collapse:collapse">
+					<tbody><tr><td style="color:#444;font-size:31px;font-weight:bold;border-collapse:collapse;vertical-align:top">
+						<img src="https://ci5.googleusercontent.com/proxy/qokF_wlYyCfFuuO8E5knCe2GhzTPvaFJmxlcL6WvuIfIuVyFKM1RhTlerSuialPsJjiARhvkgIUd7A-puIbdnJgXQ8CNxnDN8eCCaki6yZUqV-CinIL4FQ=s0-d-e1-ft#https://static0.twilio.com/resources/images/email/twilio-logo-alt.jpg" width="119" height="35" alt="twilio" style="outline:none;text-decoration:none" class="CToWUd">
+					</td></tr></tbody>
+				</table>
+
+				<table cellpadding="30" cellspacing="0" border="0" style="width:100%;border-collapse:collapse">
+					<tbody><tr><td id="m_7265280485359563667message" style="border-collapse:collapse;vertical-align:top">
+
+						<table cellpadding="10" cellspacing="0" border="0" style="width:100%;border-collapse:collapse">
+	<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+		<p id="m_7265280485359563667description" style="font-size:16px;color:#555;line-height:26px;font-weight:300;margin:0 40px">
+			<span class="notranslate">Owusu-Banahene Osei</span>,
+		</p>
+	</td></tr></tbody>
+</table>
+
+<table cellpadding="10" cellspacing="0" border="0" style="width:100%;border-collapse:collapse">
+	<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+		<p id="m_7265280485359563667description" style="font-size:16px;color:#555;line-height:26px;font-weight:300;margin:0 40px">
+			To activate your Twilio Account, please verify your email address.<br>
+			Your account will not be created until your email address is confirmed.
+		</p>
+	</td></tr></tbody>
+</table>
+
+<table cellpadding="10" cellspacing="0" border="0" style="width:100%;border-collapse:collapse">
+	<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+		<p style="font-size:16px;color:#555;line-height:26px;font-weight:300;margin:0 40px">
+			<a href="https://links.twiliocdn.com/ls/click?upn=3kZIcBV84MSbPEonqfrF6dGb3PJ6jbldw7J3yS57HqemXns2WYta3RoHKq8W8aC7cOacTs0OHe8KN2Ki2YYv0mhxeFuzQ47Apxj8-2BkfWsV5FpKGqN8003iWrks-2BGhZeJEwXRIo-2BE4cR5uOBiUuh0sRw-2B2XoRYepb3FjT3f0FTPUjbA3MnvAG3Z-2BRzl0-2FYuWqK5EbISwXiMyba5TINYoLe6p1joBnUp32yZuprhKKzGSjwk6hkDROXhawIrJJebmM8X3OD-2BQ6-2FhjNxidt8flPnvXOPVsAd9-2FKD6h-2Fb8LSFMg-3DDD7y_R9wMSCGWSzMJm2ZMRauFna9nPKOcLMubKOltCmNEoyFfmDN0EKszkK7GXzJ-2FWT2wb99-2BuTt7xwmmJleyU2NhajOOoEaZLAGfyLFwyQAEeXiJzHqdtiDZ5IkJ3jzOza005Fji4yA5X0RU9Z6z-2BBXgixcB9OTWyVGmD7t8hN-2F3BqhhOHjTVl1G-2BTylih62qoT4ZC6VJ1MOOviQPK2sWJ4LSEcaJo47PpEHSp0hc5NX66zCgWFH1XqicoPK0W9NXTnat88OxXGym7RN0ZWTnazteg-3D-3D" class="notranslate" style="color:#0000ff;font-weight:400;text-decoration:underline" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://links.twiliocdn.com/ls/click?upn%3D3kZIcBV84MSbPEonqfrF6dGb3PJ6jbldw7J3yS57HqemXns2WYta3RoHKq8W8aC7cOacTs0OHe8KN2Ki2YYv0mhxeFuzQ47Apxj8-2BkfWsV5FpKGqN8003iWrks-2BGhZeJEwXRIo-2BE4cR5uOBiUuh0sRw-2B2XoRYepb3FjT3f0FTPUjbA3MnvAG3Z-2BRzl0-2FYuWqK5EbISwXiMyba5TINYoLe6p1joBnUp32yZuprhKKzGSjwk6hkDROXhawIrJJebmM8X3OD-2BQ6-2FhjNxidt8flPnvXOPVsAd9-2FKD6h-2Fb8LSFMg-3DDD7y_R9wMSCGWSzMJm2ZMRauFna9nPKOcLMubKOltCmNEoyFfmDN0EKszkK7GXzJ-2FWT2wb99-2BuTt7xwmmJleyU2NhajOOoEaZLAGfyLFwyQAEeXiJzHqdtiDZ5IkJ3jzOza005Fji4yA5X0RU9Z6z-2BBXgixcB9OTWyVGmD7t8hN-2F3BqhhOHjTVl1G-2BTylih62qoT4ZC6VJ1MOOviQPK2sWJ4LSEcaJo47PpEHSp0hc5NX66zCgWFH1XqicoPK0W9NXTnat88OxXGym7RN0ZWTnazteg-3D-3D&amp;source=gmail&amp;ust=1588901032974000&amp;usg=AFQjCNGIloepZexLNB6Cp_2z3u1WqLrQkw">Confirm Your Email</a>
+		</p>
+    </td></tr></tbody>
+</table>
+
+<table cellpadding="10" cellspacing="0" border="0" style="width:100%;border-collapse:collapse">
+	<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+		<p id="m_7265280485359563667description" style="font-size:16px;color:#555;line-height:26px;font-weight:300;margin:0 40px">
+		    <br>
+	        Or, copy and paste the following URL into your browser: <br>
+		    <span class="notranslate"><a href="https://www.twilio.com/console/activate?key=3rEO73f%2FsU6TLoRYmzWr1UQVh4Erh3Q6jlANT9uiP9fnh1Luwntzs7CE1pwq7qcTtYqMQu0Dk%2BxsDXhPUzJUmqep77ja52jCWnVHY9yS2C%2FA8%2F4HLweRt08ftQTc%2FREPvOjFXmdXeees136Q%2BCM%2Bgg%3D%3D" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.twilio.com/console/activate?key%3D3rEO73f%252FsU6TLoRYmzWr1UQVh4Erh3Q6jlANT9uiP9fnh1Luwntzs7CE1pwq7qcTtYqMQu0Dk%252BxsDXhPUzJUmqep77ja52jCWnVHY9yS2C%252FA8%252F4HLweRt08ftQTc%252FREPvOjFXmdXeees136Q%252BCM%252Bgg%253D%253D&amp;source=gmail&amp;ust=1588901032975000&amp;usg=AFQjCNEe7WiCDJkdnie46ITw6sMpMVddzg">https://www.twilio.com/<wbr>console/activate?key=3rEO73f%<wbr>2FsU6TLoRYmzWr1UQVh4Erh3Q6jlAN<wbr>T9uiP9fnh1Luwntzs7CE1pwq7qcTtY<wbr>qMQu0Dk%<wbr>2BxsDXhPUzJUmqep77ja52jCWnVHY9<wbr>yS2C%2FA8%2F4HLweRt08ftQTc%<wbr>2FREPvOjFXmdXeees136Q%2BCM%<wbr>2Bgg%3D%3D</a></span>
+		</p>
+	</td></tr></tbody>
+</table>
+
+
+					</td></tr></tbody>
+				</table>
+
+			</td></tr></tbody>
+		</table>
+
+		<table id="m_7265280485359563667contentTable" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;width:680px;border-collapse:collapse">
+			<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+
+				<table cellpadding="10" cellspacing="0" border="0" style="width:100%;text-align:center;border-collapse:collapse">
+				<tbody><tr><td style="border-collapse:collapse;vertical-align:top">
+
+					<br>
+
+					<p style="font-size:12px;color:#555;line-height:19px;font-weight:300;margin:0 30px;text-align:center">
+						This system email was sent to <span class="notranslate">Owusu-Banahene</span> <span class="notranslate">Osei</span> (<span class="notranslate"><a href="mailto:banaheneosei87@gmail.com" style="color:#555;font-weight:300;text-decoration:none" target="_blank">banaheneosei87@gmail.com</a></span>) <span></span>regarding your Twilio Account
+						<br><span class="notranslate">(<wbr>AC635e5bc95a87d128953a3dc5b6cc<wbr>9f1f</span><span></span><span>/</span><span class="notranslate">US77270e01e12ad015d9d38af<wbr>9dd64f53f)</span>
+						<br>by Twilio, Inc., 375 Beale Street, Suite 300, San Francisco, CA 94105
+					</p>
+					<br>
+
+					<p style="font-size:14px;color:#555;line-height:16px;font-weight:300;margin:20px 30px;text-align:center">
+						If you have any questions, simply respond to this email and we'll be happy to help.
+						</p>
+
+				</td></tr></tbody>
+				</table>
+
+			</td></tr></tbody>
+		</table>
+
+	</td></tr>
