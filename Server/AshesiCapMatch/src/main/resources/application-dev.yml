@@ -1,0 +1,29 @@
+server:
+  port: 5050
+  
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/stack-o?serverTimezone=UTC
+    username: root
+    password: B@naK!ng1
+    
+    data:
+    - classpath:initialize.sql
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop         # For development purposes, always create and drop tables
+  
+  
+  mail:
+    default-encoding: UTF-8
+    host: smtp.mailtrap.io
+    username: ca4036e29f3869
+    password: 99cd580b1ee1cc
+    port: 2525
+    protocol: smtp
+#    test-connection: false
+      
+      
+#debug: true
+
