@@ -28,7 +28,9 @@ These can be seen across all our object models which can be found in the Models 
 -----------------------------------------------------------------------------------------------------
 
 UI/UX DESIGN
+
 We used Adobe XD to create high-fidelity mockups of the various screens and potential user interactions for students, faculty and admins. This helped us to better visualize the user flows and iterate as needed.
+
 
 
 FRONTEND
