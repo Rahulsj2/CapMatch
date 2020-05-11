@@ -6,13 +6,16 @@ SOFTWARE FUNCTIONS: MEETING REQUIREMENTS
 
 Sign up
   - First name, last name, email, password, major, add interests, pick SDGs
+  
 Log in
   - email, password
+  
 Students add top 3 faculty choices
 Faculty select 3 preferred students
 Matching
   - Students to faculty
   - Faculty to student
+  
 Search
   - For faculty
   - For students
