@@ -11,7 +11,9 @@ Log in
   - email, password
   
 Students add top 3 faculty choices
+
 Faculty select 3 preferred students
+
 Matching
   - Students to faculty
   - Faculty to student
