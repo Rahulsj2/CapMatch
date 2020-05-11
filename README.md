@@ -22,6 +22,7 @@ Search
 
 
 
+
 DATA STRUCTURES
 
 The backend of our application does not implement any particular data structure, but is based on the Java Collections library. The collection models used include HashSets, HashMaps, TreeSets, and TreeMaps, ArrayLists, etc.
