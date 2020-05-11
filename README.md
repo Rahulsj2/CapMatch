@@ -2,7 +2,7 @@
 Capstone Matching System for Seniors 
 
 
-Software function: meeting requirements
+SOFTWARE FUNCTIONS: MEETING REQUIREMENTS
 
 Sign up
   - First name, last name, email, password, major, add interests, pick SDGs
@@ -27,11 +27,9 @@ These can be seen across all our object models which can be found in the Models 
 
 -----------------------------------------------------------------------------------------------------
 
-Technology & Justification: For very relevant technologies (libraries, API, etc), you have to justify why they are needed in the 'ReadMe' file.
-
-https://github.com/Rahulsj2/CapMatch
 UI/UX DESIGN
 We used Adobe XD to create high-fidelity mockups of the various screens and potential user interactions for students, faculty and admins. This helped us to better visualize the user flows and iterate as needed.
+
 
 FRONTEND
 
