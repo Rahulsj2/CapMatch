@@ -67,6 +67,12 @@ const routes = [
     name: "ChangePasswd",
     meta: {layout: "onboarding"},
     component: () => import("../views/ChangePasswd.vue")
+  },
+  {
+    path: "*",
+    name: "notfound",
+    meta: {layout: "blank"},
+    component: () => import("../views/404.vue")
   }
 ];
 

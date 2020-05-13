@@ -1,13 +1,9 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-lg-6 form-container">
-                <div class="d-flex align-items-center py-3">
-                    <div class="container">
-                        <div class="col-md-9 col-lg-8 mx-auto section">      
-                            
-                        </div>
-                    </div>
+            <div class="col-md-6 col-lg-6 d-flex justify-content-center align-items-center py-5">
+                <div class="col-md-9 col-lg-8 mx-auto text-left">      
+                    <slot/>
                 </div>
             </div>
             <div class="col-md-6 col-lg-6 image-container d-none d-md-block image-container">
