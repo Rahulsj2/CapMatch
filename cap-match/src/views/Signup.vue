@@ -7,25 +7,25 @@
             <div class="row">
                 <div class="col-12 form-group">
                     <label class="col-form-label col-form-label-lg">First name<span class="text-danger">*</span></label>
-                    <input type="text" v-model.trim="$v.firstname.$model" :class="{'is-invalid': validationStatus($v.firstname)}" class="form-control form-control-lg" autofocus>
+                    <input type="text" v-model.trim="$v.firstname.$model" :class="{'is-invalid': $v.firstname.$error, 'is-valid':!$v.firstname.$invalid}" class="form-control form-control-lg" autofocus>
                     <!-- <div v-if="!$v.firstname.required" class="invalid-feedback">The first name field is required.</div> -->
                 </div>
                  <div class="col-12 form-group">
                     <label class="col-form-label col-form-label-lg">Last name<span class="text-danger">*</span></label>
-                    <input type="text" v-model.trim="lastname" :class="{'is-invalid': validationStatus($v.lastname)}" class="form-control form-control-lg">
+                    <input type="text" v-model.trim="lastname" :class="{'is-invalid': $v.lastname.$error, 'is-valid':!$v.lastname.$invalid}" class="form-control form-control-lg">
                     <!-- <div v-if="!$v.lastname.required" class="invalid-feedback">The last name field is required.</div> -->
                 </div>
                  <div class="col-12 form-group">
                     <label class="col-form-label col-form-label-lg">Email<span class="text-danger">*</span></label>
-                    <input type="email" v-model.trim="email" :class="{'is-invalid': validationStatus($v.email)}" class="form-control form-control-lg">
-                    <div v-if="!$v.email.required" class="invalid-feedback">The email field is required.</div>
-                    <div v-if="!$v.email.email" class="invalid-feedback">The email is not valid.</div>
+                    <input type="email" v-model.trim="email" :class="{'is-invalid': $v.email.$error, 'is-valid':!$v.email.$invalid}" class="form-control form-control-lg">
+                    <!-- <div v-if="!$v.email.required" class="invalid-feedback">The email field is required.</div> -->
+                    <!-- <div v-if="!$v.email.email" class="invalid-feedback">The email is not valid.</div> -->
                 </div>
                  <div class="col-12 form-group">
                     <label class="col-form-label col-form-label-lg">Password<span class="text-danger">*</span></label> 
-                    <input type="password" v-model.trim="password" :class="{'is-invalid': validationStatus($v.password)}" class="form-control form-control-lg">  
-                    <div v-if="!$v.password.required" class="invalid-feedback">The password field is required.</div>  
-                    <div v-if="!$v.password.minLength" class="invalid-feedback">You must have at least {{$v.password.$params.minLength.min}} characters.</div>                
+                    <input type="password" v-model.trim="password" :class="{'is-invalid': $v.password.$error, 'is-valid':!$v.password.$invalid}" class="form-control form-control-lg">  
+                    <!-- <div v-if="!$v.password.required" class="invalid-feedback">The password field is required.</div>   -->
+                    <!-- <div v-if="!$v.password.minLength" class="invalid-feedback">You must have at least {{$v.password.$params.minLength.min}} characters.</div>                 -->
                 </div>
                  <div class="col-12 form-group py-4">
                    <button class="btn btn-wine btn-lg col-12">Continue<i class="arrow fa fa-arrow-right mx-3"></i></button>
@@ -59,10 +59,6 @@ export default {
 
     methods: {
 
-        validationStatus: function(validation){
-            return typeof validation != 'undefined' ? validation.$error : false;
-        },
-
         submit: function(){
             this.$v.$touch();
             if (this.$v.$pendding || this.$v.$error) return; 
@@ -74,6 +70,26 @@ export default {
 </script>
 
 <style>
+
+.form-control.is-invalid{
+    border-color: #A93B3F;
+    background-color: rgba(169, 59, 63, 0.10);
+}
+
+.form-control.is-invalid:focus{
+    border-color: #A93B3F;
+    box-shadow: 0 2px 4px 0.1rem rgba(78, 78, 78, 0.15);
+}
+.form-control.is-valid{
+    border-color: #A93B3F;
+}
+
+.form-control.is-valid:focus{
+    border-color: #A93B3F;
+    box-shadow: 0 2px 4px 0.1rem rgba(78, 78, 78, 0.15);
+}
+
+
 
 h4.header{
     font-size: 32px;
