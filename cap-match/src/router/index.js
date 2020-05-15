@@ -66,7 +66,7 @@ const routes = [
     path: "/password_reset/1234",
     name: "ChangePasswd",
     meta: {layout: "onboarding"},
-    component: () => import("../views/ChangePasswd.vue")
+    component: () => import("../views/ResetChangePasswd.vue")
   },
   {
     path: "*",
