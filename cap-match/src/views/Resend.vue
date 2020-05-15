@@ -1,5 +1,5 @@
 <template>
-    <div class="passwd-email py-5">
+    <div class="passwd-email py-5 text-left">
         <div class="">
             <img src="../assets/ashesi-logo-search.png" width="100">
             <h4 class="header mb-3 pt-4">Resend Verification</h4>

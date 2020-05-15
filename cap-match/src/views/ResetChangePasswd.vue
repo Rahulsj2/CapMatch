@@ -1,5 +1,5 @@
 <template>
-     <div class="reset">
+     <div class="reset text-left">
         <img src="../assets/ashesi-logo-search.png" width="100">
         <h4 class="header mb-3 pt-5">Reset your password</h4>
         <form id="signup-form"  class="mb-5 pb-5">

@@ -1,5 +1,5 @@
 <template>
-    <div class="signup">
+    <div class="signup text-left">
         <img src="../assets/ashesi-logo-search.png" width="100">
         <h4 class="header mb-3 pt-4">Fill in some basic information</h4>
         <p class="desc">See how CapMatch can help you continuously improve your <br>cyber security rating, detect exposures and control risk.</p>
