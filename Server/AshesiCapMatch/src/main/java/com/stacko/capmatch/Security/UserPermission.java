@@ -50,12 +50,12 @@ public class UserPermission implements GrantedAuthority, Comparable<UserPermissi
 	// Add Constructor
 	public UserPermission(String name) {
 		if (name == null) throw new IllegalArgumentException("Permission name cannot be null");
-		this.name = name.toUpperCase();
+		this.name = name; 		//name.toUpperCase();
 	}
 	
 	@Override
 	public String getAuthority() {
-		return this.name.toLowerCase();
+		return this.name; 	//name.toUpperCase();
 	}
 	
 	@PrePersist

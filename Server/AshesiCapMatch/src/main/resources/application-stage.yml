@@ -1,10 +1,31 @@
+logging:
+  level:
+    org.springframework: DEBUG
+    root: WARN
+    org.hibernate: ERROR
 
+    
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/stack-o?serverTimezone=UTC
-    username: root
-    password: B@naK!ng1
+    url: jdbc:mysql://us-cdbr-east-06.cleardb.net/ad_1c043ebbb005492
+    username: b9499340b07e3c
+    password: 657b8cdd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+    data:
+    - classpath:initialize.sql
   
   jpa:
     hibernate:
-      ddl-auto: update         # For in testing, modify database to suit current state of project when it is run
+      ddl-auto: update         
+  
+  
+  mail:
+    default-encoding: UTF-8
+    host: smtp.mailtrap.io
+    username: ca4036e29f3869
+    password: 99cd580b1ee1cc
+    port: 2525
+    protocol: smtp
+#    test-connection: false
+      

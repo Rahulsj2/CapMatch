@@ -8,7 +8,7 @@ spring:
     password: B@naK!ng1
     
     data:
-    - classpath:initialize.sql
+    - classpath:initialize.sql    driver-class-name: com.mysql.cj.jdbc.Driver
   
   jpa:
     hibernate:
@@ -26,4 +26,3 @@ spring:
       
       
 #debug: true
-

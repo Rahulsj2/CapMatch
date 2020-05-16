@@ -1,5 +1,8 @@
 package com.stacko.capmatch.Controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.stacko.capmatch.Models.Faculty;
 import com.stacko.capmatch.Models.Student;
 import com.stacko.capmatch.Models.User;
+import com.stacko.capmatch.Models.HATEOAS.UserModel;
+import com.stacko.capmatch.Models.HATEOAS.Assemblers.UserModelAssembler;
 import com.stacko.capmatch.Repositories.FacultyRepository;
 import com.stacko.capmatch.Repositories.StudentRepository;
 import com.stacko.capmatch.Repositories.UserRepository;
 import com.stacko.capmatch.Security.Login.LoginDetails;
 import com.stacko.capmatch.Security.Login.LoginProfile;
 import com.stacko.capmatch.Security.Login.LoginProfileRepository;
+import com.stacko.capmatch.Services.HATEOASService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,9 +56,12 @@ public class LoginController {
 	@Lazy
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	HATEOASService hateoasService;
+	
 	
 	@GetMapping(path="/student", consumes={"application/json", "text/xml"})
-	public ResponseEntity<?> loginStudent(@RequestBody LoginDetails loginDetails) {
+	public ResponseEntity<UserModel> loginStudent(@RequestBody LoginDetails loginDetails) {
 		if (loginDetails.getEmail() == null) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
@@ -67,27 +76,32 @@ public class LoginController {
 		
 		if (user == null)
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		else if( user.getAccountStatus().equals(User.AccountStatus.BLOCKED))
-			return new ResponseEntity<>(null, HttpStatus.LOCKED);
+//		else if( user.getAccountStatus().equals(User.AccountStatus.BLOCKED))				// Leave blocking out to client
+//			return new ResponseEntity<>(null, HttpStatus.LOCKED);
 		
 		// Lastly, make sure this is a student
 		Student student = studentRepo.findById(user.getUserId()).get();
 		if (student == null)
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		else
-			return new ResponseEntity<>(student, HttpStatus.FOUND);
+		else {
+			UserModel model = (new UserModelAssembler()).toModel(student);
+			hateoasService.addUserInteractionLinks(model);
+			hateoasService.addStudentInteractionLinks(model);
+			if (model.getAccountStatus().equals(User.AccountStatus.BLOCKED))
+				return new ResponseEntity<>(model, HttpStatus.LOCKED);
+			else
+				return new ResponseEntity<>(model, HttpStatus.FOUND);
+		}
 	}
-		
-		
+	
+	
 	
 	@GetMapping(path="/faculty", consumes={"application/json", "text/xml"})
-	public ResponseEntity<EntityModel<Faculty>> loginFaculty(@RequestBody LoginDetails loginDetails) {
+	public ResponseEntity<UserModel> loginFaculty(@RequestBody LoginDetails loginDetails) {
 		if (loginDetails.getEmail() == null) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		loginDetails.setEmail(loginDetails
-								.getEmail()
-									.toLowerCase());
+		loginDetails.setEmail(loginDetails.getEmail().toLowerCase());
 		
 		User user;
 		try{
@@ -96,28 +110,40 @@ public class LoginController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		System.err.println("Reached 0");
-		
 		if (user == null)
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		else if( user.getAccountStatus().equals(User.AccountStatus.BLOCKED))
-			return new ResponseEntity<>(null, HttpStatus.LOCKED);
-		
-		System.err.println("Reached 1");
+//		else if( user.getAccountStatus().equals(User.AccountStatus.BLOCKED))				// Leave blocking out to client
+//			return new ResponseEntity<>(null, HttpStatus.LOCKED);
 		
 		// Lastly, make sure this is a faculty
 		Faculty faculty = facultyRepo.findById(user.getUserId()).get();
-		System.err.println("Reached 2");
-
 		if (faculty == null)
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		else
-			return new ResponseEntity<>(new EntityModel<>(faculty), HttpStatus.FOUND);
+		else {
+			UserModel model = (new UserModelAssembler()).toModel(faculty);
+			hateoasService.addUserInteractionLinks(model);
+			hateoasService.addFacultyInteractionLinks(model);
+			
+			if (model.getAccountStatus().equals(User.AccountStatus.BLOCKED))
+				return new ResponseEntity<>(model, HttpStatus.LOCKED);
+			else
+				return new ResponseEntity<>(model, HttpStatus.FOUND);
+		}
 	}
 	
+		
+
+
+
+
+	// ------------------------------------------------- Private Helper Methods ----------------------------------------------------	
 	
-	
-	
+	/**
+	 * 
+	 * @param loginDetails
+	 * @return
+	 * @throws IllegalStateException
+	 */
 	private User loginUser(LoginDetails loginDetails) throws IllegalStateException {
 		User user = userRepo.findByEmailIgnoringCase(loginDetails.getEmail());		
 		if (user == null) {
@@ -157,7 +183,6 @@ public class LoginController {
 			}			
 			loginProfileRepo.save(loginProfile);
 			
-			System.err.println("This is why....");
 			return null;			
 		}
 	}

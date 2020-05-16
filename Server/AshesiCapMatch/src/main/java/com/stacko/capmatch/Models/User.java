@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Data
 @NoArgsConstructor(access=AccessLevel.PROTECTED, force=true)
+//@Table(name="SystemUser")
 public class User implements UserDetails, Comparable<User> {
 	
 	/**
@@ -63,12 +64,15 @@ public class User implements UserDetails, Comparable<User> {
 	@Size(min=8)
 	protected String password;
 	
+	@Column(nullable=true)
+	protected String bio;
+	
 	protected AccountStatus accountStatus = AccountStatus.UNVERIFIED;							// Users are unverified by default
 	
 	protected Date registrationDate;
 	
 	
-	@ManyToMany(fetch=FetchType.LAZY,
+	@ManyToMany(fetch = FetchType.EAGER,
 				cascade= {CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "user_permission",
 				joinColumns = { @JoinColumn(name = "fk_user")},
@@ -209,6 +213,11 @@ public class User implements UserDetails, Comparable<User> {
 	@Override
 	public String getUsername() {
 		return this.email;
+	}
+	
+	@Override
+	public String getPassword() {
+		return this.password;
 	}
 	
 	// ------------------------------------------- End of Security methods ------------------------------------------

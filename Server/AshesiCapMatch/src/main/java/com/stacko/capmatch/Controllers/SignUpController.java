@@ -21,8 +21,11 @@ import com.stacko.capmatch.Models.Faculty;
 import com.stacko.capmatch.Models.Major;
 import com.stacko.capmatch.Models.Student;
 import com.stacko.capmatch.Models.User;
+import com.stacko.capmatch.Models.HATEOAS.UserModel;
+import com.stacko.capmatch.Models.HATEOAS.Assemblers.UserModelAssembler;
 import com.stacko.capmatch.Services.DataValidationService;
 import com.stacko.capmatch.Services.EmailService;
+import com.stacko.capmatch.Services.HATEOASService;
 import com.stacko.capmatch.Repositories.DepartmentRepository;
 import com.stacko.capmatch.Repositories.FacultyRepository;
 import com.stacko.capmatch.Repositories.MajorRepository;
@@ -79,6 +82,9 @@ public class SignUpController {
 	@Autowired
 	LoginProfileRepository loginProfileRepo;
 	
+	@Autowired
+	HATEOASService hateoasService;
+	
 	/**
 	 * 
 	 * @param student
@@ -104,7 +110,7 @@ public class SignUpController {
 			log.info("Student tried to signup without a major");
 			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		}		
-		// To Deal with hateos not including Ids, use major code to find major and reassign
+		// To Deal with hateoas not including Ids, use major code to find major and reassign
 		Major major = majorRepo.findByMajorCodeIgnoringCase(student.getMajor().getMajorCode());
 		if (major != null) {
 			student.setMajor(major);
@@ -115,7 +121,7 @@ public class SignUpController {
 			return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
 		}
 		
-		// Make sure user doesn't already exisit
+		// Make sure user doesn't already exist
 		if (userRepo.findByEmailIgnoringCase(student.getEmail()) != null) {
 			log.info("Student [" + student.getEmail() + "] tried to create duplicate account");
 			return new ResponseEntity<>(null, HttpStatus.IM_USED);
@@ -135,10 +141,17 @@ public class SignUpController {
 		// Generate Account Confirmation Code
 		generateAccountConfirmationDetails(student);
 		
-		// Email User to confirm account
-		emailService.sendAccountConfirmationEmail(student);
 		
-		return new ResponseEntity<>(null, HttpStatus.CREATED);		
+		// Create Login Profile Required for future logins
+		createLoginProfile(student);
+		
+		// Prep Return Object
+		UserModel model = (new UserModelAssembler()).toModel(student);
+		
+		hateoasService.addUserInteractionLinks(model);
+		hateoasService.addStudentInteractionLinks(model);
+		
+		return new ResponseEntity<>(model , HttpStatus.CREATED);		
 	}
 
 
@@ -149,7 +162,7 @@ public class SignUpController {
 	 * @return
 	 */
 	@PostMapping(path="/faculty", consumes={"application/json", "text/xml"})
-	public ResponseEntity<?> signUpStudent(@RequestBody Faculty faculty){
+	public ResponseEntity<?> signupFaculty(@RequestBody Faculty faculty){
 		if (!dataValidation.isUserDetailsValid(faculty)) {
 			System.err.println("Faculty tried to signup with invalid details");
 			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
@@ -168,7 +181,7 @@ public class SignUpController {
 			log.info("Faculty with email '" + faculty.getEmail() + "' tried to signup without a department");
 			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		}		
-		// To Deal with hateos not including Ids, use department code to find department and reassign
+		// To Deal with hateoas not including Ids, use department code to find department and reassign
 		Department department = departmentRepo.findByDepartmentCodeIgnoringCase(faculty.getDepartment().getDepartmentCode());
 		if (department != null) {
 			faculty.setDepartment(department);
@@ -179,7 +192,7 @@ public class SignUpController {
 			return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
 		}
 		
-		// Make sure user doesn't already exisit
+		// Make sure user doesn't already exist
 		if (userRepo.findByEmailIgnoringCase(faculty.getEmail()) != null) {
 			log.info("Faculty [" + faculty.getEmail() + "] tried to create duplicate account");
 			return new ResponseEntity<>(null, HttpStatus.IM_USED);
@@ -202,10 +215,16 @@ public class SignUpController {
 		// Generate Account Confirmation Code
 		generateAccountConfirmationDetails(faculty);
 		
-		// Email User to confirm account
-		emailService.sendAccountConfirmationEmail(faculty);
+		// Create Login Profile Required for future logins
+		createLoginProfile(faculty);
 		
-		return new ResponseEntity<>(null, HttpStatus.CREATED);		
+		// Prep Return Object
+		UserModel model = (new UserModelAssembler()).toModel(faculty);
+		
+		hateoasService.addUserInteractionLinks(model);
+		hateoasService.addFacultyInteractionLinks(model);
+		
+		return new ResponseEntity<>(model , HttpStatus.CREATED);		
 	}
 	
 	
@@ -231,9 +250,6 @@ public class SignUpController {
 		
 		// Remove authentication object
 		this.accountConfirmationRepo.deleteById(confirmationObject.getConfirmationId());
-		
-		// Create Login Profile Required for future logins
-		createLoginProfile(user);
 		
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}

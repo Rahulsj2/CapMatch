@@ -38,13 +38,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/signup", "/signup/**", "/login", "login/**")
 					.permitAll()
-				.antMatchers("/student", "/student/**")
-					.hasRole("STUDENT")
+				.antMatchers("/students", "/students/**")
+					.permitAll()
+//					.hasAuthority("STUDENT")
 				.antMatchers("/faculty", "/faculty/**")
-					.hasRole("FACULTY")
+					.permitAll()
+//					.hasRole("FACULTY")
 				.antMatchers("/admin", "/administrator")
 					.hasRole("ADMIN")					
-				.antMatchers("/", "/**").permitAll();
+				.antMatchers("/", "/**").permitAll()
+				.and()
+				.httpBasic();
+			
 		
 		http
 	      .csrf().disable();				

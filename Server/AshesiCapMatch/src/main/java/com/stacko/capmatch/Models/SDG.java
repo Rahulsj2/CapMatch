@@ -28,9 +28,10 @@ public class SDG implements Comparable<SDG> {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, unique=true)
 	private final Integer number;
 	
+	@Column(nullable=false)
 	private final String name;
 	
 	private final String description;
