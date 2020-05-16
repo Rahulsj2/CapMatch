@@ -36,16 +36,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
+				.antMatchers("/loginProfiles/**", "/accountConfirmations/**", "/userPermissions/**", "/profile/**")
+					.denyAll()				// Completely block off the above endpoints	
+					
 				.antMatchers("/signup", "/signup/**", "/login", "login/**")
 					.permitAll()
+					
 				.antMatchers("/students", "/students/**")
-					.permitAll()
-//					.hasAuthority("STUDENT")
+					.authenticated()
+					
 				.antMatchers("/faculty", "/faculty/**")
-					.permitAll()
-//					.hasRole("FACULTY")
+					.authenticated()
+					
 				.antMatchers("/admin", "/administrator")
-					.hasRole("ADMIN")					
+					.hasRole("ADMIN")
+					
 				.antMatchers("/", "/**").permitAll()
 				.and()
 				.httpBasic();
