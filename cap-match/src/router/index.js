@@ -18,6 +18,7 @@ const routes = [
   {
     path: "/user",
     name: "User",
+    meta: {layout: "onboarding"},
     component: () => import("../views/User.vue")
   },
   {
@@ -31,6 +32,18 @@ const routes = [
     name: "Login",
     meta: {layout: "onboarding"},
     component: () => import("../views/Login.vue")
+  },
+  {
+    path: "/major",
+    name: "Major",
+    meta: {layout: "onboarding"},
+    component: () => import("../views/Major.vue")
+  },
+  {
+    path: "/department",
+    name: "Department",
+    meta: {layout: "onboarding"},
+    component: () => import("../views/Department.vue")
   },
   {
     path: "/interests",

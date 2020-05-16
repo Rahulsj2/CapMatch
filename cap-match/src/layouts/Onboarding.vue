@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 col-lg-6 d-flex justify-content-center py-5">
-                <div class="col-md-9 col-lg-8 mx-auto">      
+                <div class="col-md-9 col-lg-8 mx-">      
                     <slot/>
                 </div>
             </div>
