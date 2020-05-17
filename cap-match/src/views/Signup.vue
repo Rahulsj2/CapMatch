@@ -33,7 +33,7 @@
             </div>
         </form>
         <div class="onboard-footer text-center">
-            <p>Already have an account? <a class="signin" href="#">Sign in</a></p>
+            <p>Already have an account? <router-link to="/login" class="signin">Sign in</router-link></p>
         </div>
     </div>
 </template>

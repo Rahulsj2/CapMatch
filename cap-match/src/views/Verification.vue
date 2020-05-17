@@ -7,7 +7,7 @@
        </div>
 
         <div class="onboard-footer text-center">
-            <p>Didn’t receive an email? <a class="signin" href="#">Resend verification</a></p>
+            <p>Didn’t receive an email? <router-link to="/verification_resend" class="signin" >Resend verification</router-link></p>
         </div>
     </div>
 </template>

@@ -12,7 +12,7 @@
                  <div class="col-12 form-group">
                     <label class="col-form-label col-form-label-lg">Password<span class="text-danger">*</span></label> 
                     <input type="password" v-model.trim="password" class="form-control form-control-lg"> 
-                    <div class="text-right pt-2"><a href="#">Forgot password?</a></div> 
+                    <div class="text-right pt-2"><router-link to="/password_reset">Forgot password?</router-link></div> 
                 </div>
                  <div class="col-12 form-group py-4">
                    <button class="btn btn-wine btn-lg col-12">Sign in</button>
@@ -20,7 +20,7 @@
             </div>
         </form>
         <div class="onboard-footer text-center pt-5">
-            <p class="">Don&#39;t have an account? <a class="signup" href="#">Sign up</a></p>
+            <p class="">Don&#39;t have an account? <router-link to="/signup" class="signup" href="#">Sign up</router-link></p>
         </div>
     </div>
 </template>

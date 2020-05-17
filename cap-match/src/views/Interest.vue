@@ -69,10 +69,10 @@
         </div>
        
 
-
+<!-- 
         <div class="onboard-footer text-center pt-5">
-            <p class="">Don&#39;t have an account? <a class="signup" href="#">Sign up</a></p>
-        </div>
+            <p class="">Already have an account? <router-link to="/login" class="signup" href="#">Sign in</router-link></p>
+        </div> -->
     </div>
 </template>
 

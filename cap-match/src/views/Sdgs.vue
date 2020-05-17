@@ -1,10 +1,10 @@
 <template>
-    <div class="signup py-2 text-left">
+    <div class="signup py- text-left">
         <img src="../assets/ashesi-logo-search.png" width="100">
-        <h4 class="header mb-3 pt-4">What SDGs are you interested in?</h4>
+        <h4 class="header mb-2 pt-3">What SDGs are you interested in?</h4>
          <p class="desc">Pick all interests that apply</p>
         <div class="row  my-2 ">
-            <div class="col-lg-3 col-sm-3 my-2 ">
+            <div class="col-lg-3 col-sm-3 my-1 ">
                 <div class="card" style="width: 6rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">1</h5>
@@ -145,17 +145,20 @@
                     </div>
                 </div>
             </div>
-
+            <div class="col-lg-9 my-1 ">
+            </div>
+             <!-- <div class="col-12 form-group py-4"> -->
+            <button class="btn btn-wine btn-lg col-4 ml-3 mr-5 mt-3"><i class="arrow fa fa-arrow-left mx-3"></i>Previous</button>
+            <button class="btn btn-wine btn-lg col-4 ml-5 pl-4 mt-3">Continue<i class="arrow fa fa-arrow-right mx-3"></i></button>
+        <!-- </div> -->
         </div>
-        <div class="col-12 form-group py-4">
-            <button class="btn btn-wine btn-lg col-12">Continue<i class="arrow fa fa-arrow-right mx-3"></i></button>
-        </div>
+       
        
 
 
-        <div class="onboard-footer text-center pt-5">
-            <p class="">Don&#39;t have an account? <a class="signup" href="#">Sign up</a></p>
-        </div>
+        <!-- <div class="onboard-footer text-center pt-5">
+             <p>Already have an account? <router-link to="/login" class="signin">Sign in</router-link></p>
+        </div> -->
     </div>
 </template>
 
@@ -193,42 +196,21 @@ p.desc{
     font-weight: 200;
 }
 
-.btn-select{
-    /* background: #A93B3F; */
-    color: #707070;
-    font-size: 16px;
-    font-weight: 400;
-    border-color: #DEDDDD;
-    padding: 10px 20px;
-    border-radius: 25px;
-}
-
-.btn-select:hover{
+.card:hover{
     color: #A93B3F;
     border-color: #A93B3F;
     background-color: rgba(169, 59, 63, 0.10);
 }
 
 .btn-wine{
-    background: #A93B3F;
-    color: #fff;
+    color: #707070;
     font-size: 16px;
     font-weight: 400;
 }
 
-
 .btn-wine:hover{
     color: #fff;
+    background: #A93B3F;
 }
 
-a.signup{
-    text-decoration: none;
-    color: #A93B3F;
-    text-align: right !important;
-}
-.onboard-footer{
-    position: absolute;
-    bottom: 0;
-    left: 20%;
-}
 </style>

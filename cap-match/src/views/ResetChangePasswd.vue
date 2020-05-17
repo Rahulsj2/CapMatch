@@ -27,35 +27,6 @@
                 </div>
             </div>
         </form>
-        <!-- <form id="psswdreset-form" class="mb-5 pb-5">
-            <div class="row">
-                <div class="col-12 form-group">
-                    <label class="col-form-label col-form-label-lg">Old password<span class="text-danger">*</span></label> 
-                    <input type="password" v-model.trim="$v.oldpassword.$model" :class="{'is-invalid': $v.oldpassword.$error, 'is-valid':!$v.oldpassword.$invalid}" class="form-control form-control-lg">
-                    <div class="invalid-feedback">
-                        <span v-if="!$v.oldpassword.required">Your old password is required.</span>
-                    </div>                
-                </div>
-                <div class="col-12 form-group">
-                    <label class="col-form-label col-form-label-lg">New password<span class="text-danger">*</span></label> 
-                     <input type="password" v-model.trim="$v.newpassword.$model" :class="{'is-invalid': $v.newpassword.$error, 'is-valid':!$v.newpassword.$invalid}" class="form-control form-control-lg">
-                     <div class="invalid-feedback">
-                        <span v-if="!$v.newpassword.required">New password field is required.</span>
-                        <span v-if="!$v.newpassword.minLength">You must have at least {{$v.newpassword.$params.minLength.min}} characters.</span>
-                    </div>               
-                </div>
-                <div class="col-12 form-group">
-                    <label class="col-form-label col-form-label-lg">Confirm password<span class="text-danger">*</span></label> 
-                    <input type="password" v-model.trim="$v.repeatpassword.$model" :class="{'is-invalid': $v.repeatpassword.$error, 'is-valid': (newpassword != '') ? !$v.password.$invalid : '' }" class="form-control form-control-lg">
-                    <div class="invalid-feedback">
-                        <span v-if="!$v.repeatpassword.sameAsPassword">Passwords must be a match.</span>
-                    </div>                
-                </div>
-                 <div class="col-12 form-group py-4">
-                   <button class="btn btn-wine btn-lg col-12">Reset Password</button>
-                </div>
-            </div>
-        </form> -->
     </div>
 </template> 
 
