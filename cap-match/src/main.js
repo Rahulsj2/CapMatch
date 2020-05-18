@@ -11,6 +11,7 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import Default from "./layouts/Default.vue";
 import Blank from "./layouts/Blank.vue";
 import Onboarding from "./layouts/Onboarding.vue";
+import VueRosource from "vue-resource"
 
 window.$ = window.jQuery = jQuery;
 
@@ -19,6 +20,7 @@ Vue.component("blank-layout", Blank);
 Vue.component("onboarding-layout", Onboarding);
 
 Vue.use(Vuelidate);
+Vue.use(VueRosource);
 
 Vue.config.productionTip = false;
 

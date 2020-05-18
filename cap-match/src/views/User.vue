@@ -4,8 +4,8 @@
         <h4 class="header mb-3 pt-4">Create an account</h4>
         <p class="desc">See how CapMatch can help you continuously improve your <br>cyber security rating, detect exposures and control risk.</p>
         <div class="py-5">
-            <router-link to="/major" tag="button" class="btn btn-user btn-lg col-11 mb-3"><i class="icon fa fa-user-graduate mr-5"></i>STUDENT<i class="icon fa fa-arrow-right ml-5"></i></router-link>
-            <router-link to="/department" tag="button" class="btn btn-user btn-lg col-11 my-3"><i class="icon fa fa-chalkboard-teacher mr-5"></i>FACULTY<i class="icon fa fa-arrow-right ml-5"></i></router-link>
+            <router-link to="/major" tag="button" v-on:click="addUserType" class="btn btn-user btn-lg col-11 mb-3"><i class="icon fa fa-user-graduate mr-5"></i>STUDENT<i class="icon fa fa-arrow-right ml-5"></i></router-link>
+            <router-link to="/department" tag="button" v-on:click="addUserType"  class="btn btn-user btn-lg col-11 my-3"><i class="icon fa fa-chalkboard-teacher mr-5"></i>FACULTY<i class="icon fa fa-arrow-right ml-5"></i></router-link>
         </div>     
         
                 
@@ -18,15 +18,25 @@
 </template>
 
 <script>
-// import { required, email, minLength } from 'vuelidate/lib/validators'
+
 export default {
     name: "LoginForm",
     data: function(){
         return {
-            email: '',
-            password: ''
+            userType: 'ddjdjdj'
+        }
+    },
+    methods: {
+        addUserType: function(){
+            this.$http.post('https://capmatch-staging.cfapps.io/users', {
+                userType: this.userType
+
+            }).then(function(data){
+                console.log(data);
+            });
         }
     }
+
 
 }
 </script>
