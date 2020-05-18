@@ -83,6 +83,26 @@ const routes = [
     component: () => import("../views/ResetChangePasswd.vue")
   },
   {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: () => import("../views/Dashboard.vue")
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("../views/Profile.vue")
+  },
+  {
+    path: "/choices",
+    name: "Choices",
+    component: () => import("../views/Choices.vue")
+  },
+  {
+    path: "/match",
+    name: "Match",
+    component: () => import("../views/Match.vue")
+  },
+  {
     path: "*",
     name: "notfound",
     meta: {layout: "blank"},
