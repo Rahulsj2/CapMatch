@@ -4,7 +4,15 @@ server:
 spring:
   profiles:
     active:
-    - dev
+    - default
+    
+  mail:
+    default-encoding: UTF-8
+    host: smtp.mailtrap.io
+    username: ca4036e29f3869
+    password: 99cd580b1ee1cc
+    port: 2525
+    protocol: smtp
     
 # EMAIL SERVICE CONFIGURATION
   freemarker:

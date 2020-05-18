@@ -5,6 +5,7 @@ import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -13,13 +14,11 @@ import javax.persistence.OneToMany;
 
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
-@EqualsAndHashCode(callSuper=false)					// Play around with this a bit
 public class Faculty extends User {
 
 	/**
@@ -29,10 +28,10 @@ public class Faculty extends User {
 
 	private int menteeLimit;
 	
-	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.REFRESH}, optional=true)
+	@ManyToOne(cascade= {CascadeType.REFRESH}, optional=true)
 	public Department department;
 	
-	@OneToMany(mappedBy="supervisor", cascade={CascadeType.PERSIST, CascadeType.REFRESH})
+	@OneToMany(mappedBy="supervisor", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.REFRESH})
 	private Set<Student> supervisedStudents = new TreeSet<>();
 	
 	
@@ -110,6 +109,34 @@ public class Faculty extends User {
 	public boolean isSupervisorFull() {
 		return this.menteeLimit <= this.supervisedStudents.size();
 	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof Faculty))
+			return false;
+		Faculty other = (Faculty) obj;
+		if (department == null) {
+			if (other.department != null)
+				return false;
+		} else if (!department.equals(other.department))
+			return false;
+		return true;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((department == null) ? 0 : department.hashCode());
+		return result;
+	}
 	
+		
 
 }

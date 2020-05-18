@@ -128,6 +128,8 @@ public class User implements UserDetails, Comparable<User> {
 	
 	// ----------------------------------- General Class Methods ---------------------------------------
 	
+	public String getName() { return this.firstname + " " + this.lastname;}
+	
 	public void grantPermission(UserPermission permission) {
 		if (permission != null) {
 			this.permissions.add(permission);
@@ -222,7 +224,8 @@ public class User implements UserDetails, Comparable<User> {
 	
 	// ------------------------------------------- End of Security methods ------------------------------------------
 	
-		
+	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -230,12 +233,12 @@ public class User implements UserDetails, Comparable<User> {
 		if (!(obj instanceof User))
 			return false;
 		User other = (User) obj;
-		if (SDGs == null) {
-			if (other.SDGs != null)
-				return false;
-		} else if (!SDGs.equals(other.SDGs))
-			return false;
 		if (accountStatus != other.accountStatus)
+			return false;
+		if (bio == null) {
+			if (other.bio != null)
+				return false;
+		} else if (!bio.equals(other.bio))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -246,11 +249,6 @@ public class User implements UserDetails, Comparable<User> {
 			if (other.firstname != null)
 				return false;
 		} else if (!firstname.equals(other.firstname))
-			return false;
-		if (interests == null) {
-			if (other.interests != null)
-				return false;
-		} else if (!interests.equals(other.interests))
 			return false;
 		if (lastname == null) {
 			if (other.lastname != null)
@@ -267,32 +265,38 @@ public class User implements UserDetails, Comparable<User> {
 				return false;
 		} else if (!permissions.equals(other.permissions))
 			return false;
+		if (registrationDate == null) {
+			if (other.registrationDate != null)
+				return false;
+		} else if (!registrationDate.equals(other.registrationDate))
+			return false;
 		if (userId != other.userId)
 			return false;
 		return true;
 	}
 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((SDGs == null) ? 0 : SDGs.hashCode());
 		result = prime * result + ((accountStatus == null) ? 0 : accountStatus.hashCode());
+		result = prime * result + ((bio == null) ? 0 : bio.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstname == null) ? 0 : firstname.hashCode());
-		result = prime * result + ((interests == null) ? 0 : interests.hashCode());
 		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((permissions == null) ? 0 : permissions.hashCode());
+		result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
 		result = prime * result + userId;
 		return result;
 	}
+	
 
 
 	// --------------------------------------- Define Helper Classes/Enums ---------------------------------
 	
 	public enum AccountStatus{
 		UNVERIFIED, ACTIVE, BLOCKED, EXPIRED;
-	}
-	
+	}	
 }

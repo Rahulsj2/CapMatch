@@ -5,6 +5,7 @@ import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -25,7 +26,7 @@ public class Student extends User {
 	 */
 	private static final long serialVersionUID = 8102568931312693344L;
 	
-	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.REFRESH}, optional=true)
+	@ManyToOne(cascade= {CascadeType.REFRESH}, fetch= FetchType.EAGER, optional=true)
 	private Major major;
 	
 	

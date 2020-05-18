@@ -107,5 +107,11 @@ public class Department {
 		result = prime * result + departmentId;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Department [departmentId=" + departmentId + ", departmentCode=" + departmentCode + ", name=" + name
+				+ "]";
 	}	
 }
