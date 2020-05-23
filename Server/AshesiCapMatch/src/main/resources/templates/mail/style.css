@@ -1,0 +1,89 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+}
+.email-background {
+    background: #FAFAFA;
+    padding: 20px;
+}
+
+.email-container {
+    max-width: 600px;
+    background: #FFFFFF;
+    font-family: 'Lato', sans-serif;
+    color: #707070;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: #707070;
+}
+
+h2 {
+    text-align: center;
+    padding: 32px 0px 56px;
+    font-weight: 700;
+    line-height: 29px;
+}
+
+h4 {
+    margin: 32px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+p {
+    margin: 32px;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 24px;
+}
+
+
+
+
+button {
+    margin: 32px auto 0px;
+    display: block;
+    background-color: #A93B3F;
+    border: none;
+    padding: 13px 32px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button-text {
+    color: #FFFFFF;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+}
+
+a {
+    color: #707070;
+}
+
+a:hover {
+    color: #A93B3F;
+}
+
+.footer {
+    background: none;
+    text-align: center;
+
+}
+    
+.p-footer {
+    font-family: 'Lato', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    line-height: 12px;
+    color: #707070;
+}

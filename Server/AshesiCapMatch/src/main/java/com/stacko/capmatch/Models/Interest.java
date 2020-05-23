@@ -1,6 +1,7 @@
 package com.stacko.capmatch.Models;
 
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -23,8 +24,13 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
-public class Interest implements Comparable<Interest> {
+public class Interest implements Comparable<Interest>, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6224586112680579986L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int interestId;

@@ -1,0 +1,42 @@
+{"properties": [
+  {
+    "name": "app.config.default-faculty-menteeLimit",
+    "type": "java.lang.Integer",
+    "description": "The number of mentees each faculty is assigned to suppervise by default"
+  },
+  {
+    "name": "app.config.student-max-favourite-count",
+    "type": "java.lang.Integer",
+    "description": "The max number of faculty a student can add as favourites"
+  },
+  {
+    "name": "app.config.faculty-max-favourite-count",
+    "type": "java.lang.Integer",
+    "description": "The max number of students a faculty can add as favourites"
+  },
+  {
+    "name": "client.config.routes.base-path",
+    "type": "java.lang.String",
+    "description": "The base path for the hosted client that consumes this API"
+  },
+  {
+    "name": "client.config.routes.reset-password",
+    "type": "java.lang.String",
+    "description": "The path to the page where a user can reset their password after forgetting"
+  },
+  {
+    "name": "client.config.routes.confirm-account",
+    "type": "java.lang.String",
+    "description": "path to page where accounts are confirmed after registration on client"
+  },
+  {
+    "name": "app.config.maximum-user-concurrent-sessions",
+    "type": "java.lang.String",
+    "description": "Maximum number of current sessions per user"
+  },
+  {
+    "name": "app.config.session-idle-lifetime",
+    "type": "java.lang.Integer",
+    "description": "The maximum time a session can remain idle for before timeout in seconds"
+  }
+]}

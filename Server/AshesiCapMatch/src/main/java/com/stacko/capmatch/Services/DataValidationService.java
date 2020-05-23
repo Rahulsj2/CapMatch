@@ -1,6 +1,7 @@
 package com.stacko.capmatch.Services;
 
 
+import java.util.Base64;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class DataValidationService {
 	private final int NAME_MAX_LENGTH = 25;
 	
 	public boolean isUserDetailsValid(User user) {
-		// Firstly, none of the essential detials should be absent
+		// Firstly, none of the essential details should be absent
 		if (user.getFirstname() == null ||
 				user.getLastname() == null ||
 				user.getEmail() == null ||
@@ -65,6 +66,13 @@ public class DataValidationService {
 		// Password rules go here
 		return password.length() >= PASSWORD_MIN_LENGTH;
 	}
+	
+	
+	public String composeAuthenticationHeaderValue(String username, String password) {
+		String composedValue = username + ":" + password;
+		return "Basic " + Base64.getEncoder().encodeToString(composedValue.getBytes());
+	}
+
 
 }
 

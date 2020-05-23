@@ -1,5 +1,6 @@
 package com.stacko.capmatch.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +23,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
 @Data
-public class Department {
+public class Department implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4689153669589969599L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int departmentId;

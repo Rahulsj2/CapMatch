@@ -14,7 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stacko.capmatch.Configuration.ClientRoutesConfig;
 import com.stacko.capmatch.Models.User;
 import com.stacko.capmatch.Security.Signup.AccountConfirmation;
 import com.stacko.capmatch.Security.Signup.AccountConfirmationRepository;
@@ -36,51 +36,19 @@ public class EmailService {
 	private Configuration config;				// Imported fromFreeMarkerTemplate
 	
 	@Autowired
+	private ClientRoutesConfig clientRoutes;
+	
+	@Autowired
 	private AccountConfirmationRepository accountConfirmationRepo;
 	
-	ObjectMapper jacksonObjectMapper = new ObjectMapper();
-//	
-//	
-//	@Primary
-//	@Bean 
-//	public FreeMarkerConfigurationFactoryBean factoryBean() {
-//		FreeMarkerConfigurationFactoryBean bean=new FreeMarkerConfigurationFactoryBean();
-//		bean.setTemplateLoaderPath("classpath:/templates/mail");
-//		return bean;
-//	}
+//	ObjectMapper jacksonObjectMapper = new ObjectMapper();
 	
 	
-//	public MailResponse sendEmail(MailRequest request, Map<String, Object> model) {
-//		MailResponse response = new MailResponse();
-//		MimeMessage message = sender.createMimeMessage();
-//		try {
-//			// set mediaType
-//			MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-//					StandardCharsets.UTF_8.name());
-//			// add attachment
-//			helper.addAttachment("logo.png", new ClassPathResource("logo.png"));
-//
-//			Template t = config.getTemplate("email-template.ftl");
-//			String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
-//
-//			helper.setTo(request.getTo());
-//			helper.setText(html, true);
-//			helper.setSubject(request.getSubject());
-//			helper.setFrom(request.getFrom());
-//			sender.send(message);
-//
-//			response.setMessage("mail send to : " + request.getTo());
-//			response.setStatus(Boolean.TRUE);
-//
-//		} catch (MessagingException | IOException | TemplateException e) {
-//			response.setMessage("Mail Sending failure : "+e.getMessage());
-//			response.setStatus(Boolean.FALSE);
-//		}
-//
-//		return response;
-//	}
-	
-	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public boolean sendAccountConfirmationEmail(User user) {
 		if (user == null || user.getEmail() == null) return false;
 		
@@ -93,48 +61,105 @@ public class EmailService {
 			return false;			
 		}
 		
+		Map<String, Object> mailMap = new HashMap<>();
+		mailMap.put("confirmCode", confirmationDetails.getConfirmCode());
+		mailMap.put("clientBasePath", this.clientRoutes.getBasePath());
+		
+		String mailSubject = "Confirm Your Account Registration";
+		String templateName = "verify-email-inline.ftl";
+		
+		return sendMail(user, mailSubject, templateName, mailMap);	
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public boolean sendPasswordResetEmail(User user) {
+		if (user == null || user.getEmail() == null) return false;
+		
+		// Get Account Confirmation Details
+		AccountConfirmation confirmationDetails = accountConfirmationRepo.findByUser(user);		
+		if (confirmationDetails == null) {
+			log.error("Could not find confirmation details for user '" + user.getEmail() 
+					+ "while trying to send account confirmation email");
+			return false;			
+		}
+		
+		Map<String, Object> mailMap = new HashMap<>();
+		mailMap.put("confirmCode", confirmationDetails.getConfirmCode());
+		mailMap.put("passwordResetPage", this.clientRoutes.getResetPassword());
+		
+		String mailSubject = "Reset Your Password";
+		String templateName = "password_reset_email_template.ftl";
+		
+		return sendMail(user, mailSubject, templateName, mailMap);
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param user
+	 * @param mailSubject
+	 * @param templateName
+	 * @param mailArgumentMap
+	 * @return
+	 */
+	private boolean sendMail(User user, String mailSubject, String templateName, Map<String, Object> mailArgumentMap) {
+		if (user == null || user.getEmail() == null) return false;
+		
 		MimeMessage email = sender.createMimeMessage();
 		try {
-			// set mediaType
+			// Set MediaType
 			MimeMessageHelper helper = new MimeMessageHelper(email, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
 					StandardCharsets.UTF_8.name());	
-			Template mailTemplate = config.getTemplate("account-confirmation-email-template.ftl");
 			
-			//Create User Map
-//			Map<String, Object> userMap = this.jacksonObjectMapper.convertValue(user,  Map.class);			Resulted In infinite recursion. Investigate
-			Map<String, Object> userMap = new HashMap<>();
-			userMap.put("firstname", user.getFirstname());
-			userMap.put("lastname", user.getLastname());
-			userMap.put("confirmCode", confirmationDetails.getConfirmCode());
+//			// This is how to simply add an attachment to any mail
+//			helper.addAttachment("logo.png", new ClassPathResource("logo.png"));
 			
+			Template mailTemplate = config.getTemplate(templateName);
 			
-			String html = FreeMarkerTemplateUtils.processTemplateIntoString(mailTemplate, userMap);
+			addUserDetailsToMailMap(user, mailArgumentMap);			
+			
+			String html = FreeMarkerTemplateUtils.processTemplateIntoString(mailTemplate, mailArgumentMap);
 	
 			helper.setTo(user.getEmail());
 			helper.setText(html, true);
-			helper.setSubject("Confirm Your Account Registration");
-//			helper.setFrom("ca4036e29f3869");			// Configure the bit from APP CONFIGFILE
+			helper.setSubject(mailSubject);
+			helper.setFrom("capmatch@ashesi.edu.gh");
 			
 			sender.send(email);
 	
 		} catch (TemplateException te) {
-			log.error("There was am templating error when sending account confirmation email to '" + user.getEmail()
+			log.error("There was a templating error when sending email with subject '" + mailSubject + "' to '" + user.getEmail()
 					+ "' \t ErrorTrace: ", te.toString());
 			return false;
 		} catch(IOException ioe) {
-			log.error("Could not find or load account confirmation email template while sending account confirmation"
-					+ " email to '" + user.getEmail()
-					+ "' \t ErrorTrace: ", ioe.getMessage());
+			log.error("Could not find or load template '" + templateName + "'  when sending email with subject '" + mailSubject +
+					"' to '" + user.getEmail()	+ "' \t ErrorTrace: ", ioe.getMessage());
 			return false;
 		} catch (MessagingException me) {
-			log.error("There was a Messaging Exception when sending account confirmation email to '" + user.getEmail()
+			log.error("There was a Messaging Exception when sending email with subject '" + mailSubject + "' to '" + user.getEmail()
 			+ "' \t ErrorTrace: ", me.toString());
 			return false;
 		}
 		
-		log.info("Confirmation email sent to '" + user.getEmail() + "'... ");
+		log.info("Email with subject '" + mailSubject + "' sent to '" + user.getEmail() + "'... ");
 		
-		return true;	
+		return true;			
+	}
+
+
+
+	private void addUserDetailsToMailMap(User user, Map<String, Object> mailMap) {
+		mailMap.put("firstname", user.getFirstname());
+		mailMap.put("lastname", user.getLastname());
+		mailMap.put("email", user.getEmail());
 	}
 
 

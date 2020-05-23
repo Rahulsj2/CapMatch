@@ -1,8 +1,9 @@
-logging:
-  level:
-    org.springframework: DEBUG
-    root: WARN
-    org.hibernate: ERROR
+#
+#logging:
+#  level:
+#    org.springframework: INFO
+#    root: WARN
+#    org.hibernate: ERROR
 
     
 spring:
@@ -12,20 +13,43 @@ spring:
     password: 657b8cdd
     driver-class-name: com.mysql.cj.jdbc.Driver
     
-    data:
-    - classpath:initialize.sql
+  redis:
+    host: redis-18716.c11.us-east-1-2.ec2.cloud.redislabs.com
+    port: 18716
+    password: 2xWlbXoSrN9OFlWBQKksmcVB7IHs9A7g
+
   
   jpa:
     hibernate:
       ddl-auto: update         
   
   
+#  mail:
+#    default-encoding: UTF-8
+#    host: smtp.mailtrap.io
+#    username: ca4036e29f3869
+#    password: 99cd580b1ee1cc
+#    port: 2525
+#    protocol: smtp
+
+# MailGun SMTP Config
   mail:
     default-encoding: UTF-8
-    host: smtp.mailtrap.io
-    username: ca4036e29f3869
-    password: 99cd580b1ee1cc
-    port: 2525
+    host: smtp.mailgun.org
+    username: postmaster@sandbox8a4c7ef33b1a4337b4be72d55d55f55b.mailgun.org
+    password: a6d2636d8efe6e7cbaf8d30349893c54-e5e67e3e-3909243d
+    port: 587 
     protocol: smtp
-#    test-connection: false
+
+
+# Add application configuration    
+client:
+  config:
+    routes:
+      base-path: http://localhost:8080
+      
+
+app:
+  config:
+    session-idle-lifetime: 1200         # On the stage, sessions last 20 minutes when idle   
       

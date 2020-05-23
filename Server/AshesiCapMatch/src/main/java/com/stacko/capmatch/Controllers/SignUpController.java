@@ -4,6 +4,8 @@ package com.stacko.capmatch.Controllers;
 import java.nio.charset.Charset;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,10 +74,7 @@ public class SignUpController {
 	
 	@Autowired
 	private SecurityConfig securityConfig;
-	
-	@Autowired
-	private EmailService emailService;
-	
+		
 	@Autowired
 	AccountConfirmationRepository accountConfirmationRepo;
 	
@@ -85,13 +84,16 @@ public class SignUpController {
 	@Autowired
 	HATEOASService hateoasService;
 	
+	@Autowired
+	DataValidationService validationService;
+	
 	/**
 	 * 
 	 * @param student
 	 * @return
 	 */
 	@PostMapping(path="/student", consumes={"application/json", "text/xml"})
-	public ResponseEntity<?> signUpStudent(@RequestBody Student student){
+	public ResponseEntity<?> signUpStudent(@RequestBody Student student, HttpServletResponse res){
 		if (!dataValidation.isUserDetailsValid(student)) {
 			System.err.println("Student tried to signup with invalid details");
 			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
@@ -101,6 +103,7 @@ public class SignUpController {
 		student.setEmail(student.getEmail().toLowerCase());
 		
 		// Encrypt Password
+		String clientEncodedPass = student.getPassword();
 		student.setPassword(securityConfig
 								.encoder()
 									.encode(student.getPassword()));
@@ -144,6 +147,11 @@ public class SignUpController {
 		
 		// Create Login Profile Required for future logins
 		createLoginProfile(student);
+		
+		// Add Authorization Header to Response
+		res.setHeader("Authorization", this.validationService
+												.composeAuthenticationHeaderValue
+													(student.getEmail(), clientEncodedPass));
 		
 		// Prep Return Object
 		UserModel model = (new UserModelAssembler()).toModel(student);
@@ -260,7 +268,7 @@ public class SignUpController {
 	// -------------------------------------- Class Private Helper Methods -------------------------------------------
 	
 	
-	private void generateAccountConfirmationDetails(User user) {
+	public void generateAccountConfirmationDetails(User user) {
 		// Generate Random 20 character String and encode it
 		byte[] array = new byte[20]; // length is bounded by 7
 	    new Random().nextBytes(array);
@@ -283,7 +291,7 @@ public class SignUpController {
 	    
 	    if (confirmationDetails == null) {
 	    	log.error("Unable to store Account Confirmation details for user '" + user.getEmail() 
-	    				+	"' during signup");
+	    				+	"' during signup or 'forgotPassword'");
 	    }
 	}
 	

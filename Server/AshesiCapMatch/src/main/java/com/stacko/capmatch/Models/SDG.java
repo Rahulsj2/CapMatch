@@ -1,5 +1,6 @@
 package com.stacko.capmatch.Models;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -21,8 +22,13 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
 @RequiredArgsConstructor
-public class SDG implements Comparable<SDG> {
+public class SDG implements Comparable<SDG>, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4111279920056519076L;
+
 	@Id
 	@Column(nullable=false, unique=true)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

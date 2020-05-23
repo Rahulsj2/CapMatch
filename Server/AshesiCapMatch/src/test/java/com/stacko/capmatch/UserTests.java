@@ -137,6 +137,13 @@ class UserTests {
 		assertEquals(2, user.getInterests().size());
 		assertTrue(user.getInterests().contains(interest1));
 		assertTrue(user.getInterests().contains(interest2));
+		assertTrue(interest1.getInterestedUsers().size() == 1);
+		
+		user.removeAllInterests();
+		user = userRepo.findById(user.getUserId()).get();
+		assertEquals(0, user.getInterests().size());
+		
+		assertTrue(interest1.getInterestedUsers().size() == 0);
 		
 	}
 

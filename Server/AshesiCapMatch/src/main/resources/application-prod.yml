@@ -8,3 +8,25 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none         # For in production, don't modify database on run
+      
+#   mail:
+#    default-encoding: UTF-8
+#    host: smtp.mailtrap.io
+#    username: ca4036e29f3869
+#    password: 99cd580b1ee1cc
+#    port: 2525
+#    protocol: smtp
+      
+      
+# Add application configuration
+    
+    
+client:
+  config:
+    routes:
+      base-path: https://capmatch.ashesi.edu.gh
+      
+
+app:
+  config:
+    session-idle-lifetime: 1800         # On the stage, sessions last 30 minutes when idle  

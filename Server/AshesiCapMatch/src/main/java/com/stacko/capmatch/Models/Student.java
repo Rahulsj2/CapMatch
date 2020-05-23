@@ -1,5 +1,6 @@
 package com.stacko.capmatch.Models;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
 @EqualsAndHashCode(callSuper=false)					// Play around with this a bit
-public class Student extends User {
+public class Student extends User implements Serializable {
 	/**
 	 * 
 	 */

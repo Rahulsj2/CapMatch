@@ -1,11 +1,13 @@
 package com.stacko.capmatch.Models;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,8 +24,13 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
-public class Major {
+public class Major implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6695209665713622262L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int majorId;
@@ -37,7 +44,7 @@ public class Major {
 	@JoinColumn(name="department_id")
 	private Department department;	
 	
-	@OneToMany(mappedBy="major", cascade={CascadeType.PERSIST, CascadeType.REFRESH})
+	@OneToMany(mappedBy="major", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.REFRESH})
 	private Set<Student> students = new TreeSet<>();
 	
 	

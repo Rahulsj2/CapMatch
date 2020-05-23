@@ -1,6 +1,7 @@
+#logging:#  level:#    root: DEBUG
+#
 server:
-  port: 5050
-  
+  port: 5050
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/stack-o?serverTimezone=UTC
@@ -12,7 +13,8 @@ spring:
   
   jpa:
     hibernate:
-      ddl-auto: create-drop         # For development purposes, always create and drop tables
+      ddl-auto: update
+#      ddl-auto: create-drop         # For development purposes, always create and drop tables
   
   
   mail:
@@ -22,7 +24,51 @@ spring:
     password: 99cd580b1ee1cc
     port: 2525
     protocol: smtp
-#    test-connection: false
-      
+    test-connection: false
+
+
+
+## MailGun SMTP Config
+#  mail:
+#    default-encoding: UTF-8
+#    host: smtp.mailgun.org
+#    username: postmaster@sandbox8a4c7ef33b1a4337b4be72d55d55f55b.mailgun.org
+#    password: a6d2636d8efe6e7cbaf8d30349893c54-e5e67e3e-3909243d
+#    port: 587 
+#    protocol: smtp
+
+  
+    
+    
+## Gmail SMTP Config
+#  mail:
+#    default-encoding: UTF-8
+#    host: smtp.gmail.com
+#    username: ashesi.capmatch@gmail.com
+#    password: capMatchPass
+#    port: 465 
+#    protocol: smtp
+#    properties:#      smtp:
+#        starttls:
+#          enable: true
+#          required: true
+#        auth: true
+#        socketFactory: 465
+##    test-connection: true
+
+
+
+
+# Add application configuration
+    
+client:
+  config:
+    routes:
+      base-path: http://localhost:8080    
+    
+    
+app:
+  config:
+    session-idle-lifetime: 120      
       
 #debug: true

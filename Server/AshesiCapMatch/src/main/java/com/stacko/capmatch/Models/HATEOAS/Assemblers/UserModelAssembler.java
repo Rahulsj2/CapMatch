@@ -3,6 +3,7 @@ package com.stacko.capmatch.Models.HATEOAS.Assemblers;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
+import com.stacko.capmatch.Controllers.FacultyController;
 import com.stacko.capmatch.Controllers.StudentController;
 import com.stacko.capmatch.Controllers.UserController;
 import com.stacko.capmatch.Models.Faculty;
@@ -47,7 +48,9 @@ public class UserModelAssembler extends RepresentationModelAssemblerSupport<User
 	
 	
 	private void addFacultyLinks(Faculty faculty, UserModel model) {
-				
+		model.add(linkTo(FacultyController.class).slash(faculty.getUserId()).slash("department").withRel("department"));
+		model.add(linkTo(FacultyController.class).slash(faculty.getUserId()).slash("supervisedStudents").withRel("supervisedStudents"));
+		model.add(linkTo(FacultyController.class).slash(faculty.getUserId()).slash("favouriteStudents").withRel("favouriteStudents"));
 	}
 
 

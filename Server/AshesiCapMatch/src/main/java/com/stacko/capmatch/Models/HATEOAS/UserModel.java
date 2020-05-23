@@ -7,6 +7,8 @@ import java.util.TreeSet;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.stacko.capmatch.Models.Faculty;
+import com.stacko.capmatch.Models.Student;
 import com.stacko.capmatch.Models.User;
 import com.stacko.capmatch.Models.User.AccountStatus;
 import com.stacko.capmatch.Security.UserPermission;
@@ -39,8 +41,17 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 	@Getter
 	private Date registrationDate;
 	
+//	@Getter
+//	private Set<UserPermissionModel> permissions;
+	
 	@Getter
-	private Set<UserPermissionModel> permissions;
+	private Set<User.Role> roles;
+	
+	@Getter
+	private String department;
+	
+	@Getter
+	private String major;
 	
 	
 	public UserModel(User user) {
@@ -55,19 +66,37 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 		this.accountStatus = user.getAccountStatus();
 		this.registrationDate = user.getRegistrationDate();
 		this.bio = user.getBio();
-		this.permissions = this.convertPermissionsToModels(user.getPermissions());		
+//		this.permissions = this.convertPermissionsToModels(user.getPermissions());
+		this.roles = assignRoles(user.getPermissions());
+		
+		try {		// Try casting to student
+			this.major = ((Student) user).getMajor().getName();
+		}catch (Exception e) {
+			try { // if that fails, try casting to faculty
+				this.department = ((Faculty) user).getDepartment().getName();
+			}catch (Exception exc){
+				// Do nothing
+			}
+		}		
 	}
 	
 	
-	private Set<UserPermissionModel> convertPermissionsToModels(Set<UserPermission> permissions){
-		if (permissions == null)
-			return null;
-		Set<UserPermissionModel> set = new TreeSet<>();
+	private Set<User.Role> assignRoles(Set<UserPermission> permissions){
+		if (permissions == null) return null;
+		Set<User.Role> roles = new TreeSet<>();
 		Iterator<UserPermission> iter = permissions.iterator();
+		
+		UserPermission currentPermission;
 		while (iter.hasNext()) {
-			set.add(new UserPermissionModel(iter.next()));
+			currentPermission = iter.next();
+			if (currentPermission.toString().equalsIgnoreCase("STUDENT"))
+				roles.add(User.Role.STUDENT);
+			else if (currentPermission.toString().equalsIgnoreCase("FACULTY"))
+				roles.add(User.Role.FACULTY);
+			if (currentPermission.toString().equalsIgnoreCase("ADMIN"))
+				roles.add(User.Role.ADMIN);
 		}		
-		return set;
+		return roles;
 	}
 
 

@@ -1,5 +1,6 @@
 package com.stacko.capmatch.Models;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -35,7 +36,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access=AccessLevel.PROTECTED, force=true)
 //@Table(name="SystemUser")
-public class User implements UserDetails, Comparable<User> {
+public class User implements UserDetails, Comparable<User>, Serializable {
 	
 	/**
 	 * 
@@ -157,6 +158,11 @@ public class User implements UserDetails, Comparable<User> {
 		interest.getInterestedUsers().remove(this);
 	}
 	
+	public void removeAllInterests() {
+		for (Interest interest : this.interests)
+			this.removeInterest(interest);
+	}
+	
 	public void addSDG(SDG sdg) {
 		if (sdg != null) {
 			this.SDGs.add(sdg);
@@ -170,6 +176,11 @@ public class User implements UserDetails, Comparable<User> {
 			sdg.getInterestedUsers().remove(this);
 		}
 	}	
+	
+	public void removeAllSDGs() {
+		for (SDG sdg: this.SDGs)
+			removeSDG(sdg);
+	}
 	
 	/**
 	 * Compare to method was added to make this object compatible for use with a TreeSet
@@ -298,5 +309,9 @@ public class User implements UserDetails, Comparable<User> {
 	
 	public enum AccountStatus{
 		UNVERIFIED, ACTIVE, BLOCKED, EXPIRED;
-	}	
+	}
+	
+	public enum Role{
+		STUDENT, FACULTY, ADMIN
+	}
 }
