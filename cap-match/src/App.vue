@@ -14,13 +14,14 @@ export default {
   name: 'CapMatch',
   computed:{
     layout(){
-      return (this.$route.meta.layout || defaultLayout) + '-layout'
+      return (this.$route.meta.layout || defaultLayout) + '-layout';
     }
   }
 }
 </script>
 
 <style lang="scss">
+$--color-primary: #A93B3F;
 #app {
   font-family: 'Lato', sans-serif, Helvetica, Arial;
   -webkit-font-smoothing: antialiased;

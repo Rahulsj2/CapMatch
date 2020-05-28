@@ -4,40 +4,32 @@
         <h4 class="header mb-3 pt-4">Create an account</h4>
         <p class="desc">See how CapMatch can help you continuously improve your <br>cyber security rating, detect exposures and control risk.</p>
         <div class="py-5">
-            <router-link to="/major" tag="button" v-on:click="addUserType" class="btn btn-user btn-lg col-11 mb-3"><i class="icon fa fa-user-graduate mr-5"></i>STUDENT<i class="icon fa fa-arrow-right ml-5"></i></router-link>
-            <router-link to="/department" tag="button" v-on:click="addUserType"  class="btn btn-user btn-lg col-11 my-3"><i class="icon fa fa-chalkboard-teacher mr-5"></i>FACULTY<i class="icon fa fa-arrow-right ml-5"></i></router-link>
+            <button v-on:click.prevent="student()" class="btn btn-user btn-lg col-11 mb-3"><i class="icon fa fa-user-graduate mr-5"></i>STUDENT<i class="icon fa fa-arrow-right ml-5"></i></button>
+            <button v-on:click.prevent="faculty()"  class="btn btn-user btn-lg col-11 my-3"><i class="icon fa fa-chalkboard-teacher mr-5"></i>FACULTY<i class="icon fa fa-arrow-right ml-5"></i></button>
         </div>     
         
-                
-
-
         <div class="onboard-footer text-center pt-5">
-            <p class="">Already have an account? <router-link to="/login" class="signup" href="#">Sign in</router-link></p>
+            <p class="">Already have an account? <router-link to="/login" class="signup">Sign in</router-link></p>
         </div>
     </div>
 </template>
 
+
 <script>
-
+// import {EventBus} from '@/event-bus.js';
 export default {
-    name: "LoginForm",
-    data: function(){
-        return {
-            userType: 'ddjdjdj'
-        }
-    },
+    name: "user",
     methods: {
-        addUserType: function(){
-            this.$http.post('https://capmatch-staging.cfapps.io/users', {
-                userType: this.userType
-
-            }).then(function(data){
-                console.log(data);
-            });
-        }
-    }
-
-
+        faculty(){
+            this.$store.commit("changeUserGroup","faculty");
+            this.$router.push('/department')
+        },
+        student(){
+            this.$store.commit("changeUserGroup","student");
+            this.$router.push('/major');
+        }    
+    },
+    
 }
 </script>
 
@@ -59,7 +51,6 @@ p.desc{
 }
 
 .btn-user{
-    /* background: #A93B3F; */
     color: #707070;
     font-size: 16px;
     font-weight: 400;

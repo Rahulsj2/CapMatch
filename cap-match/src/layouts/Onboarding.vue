@@ -1,12 +1,12 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-lg-6 d-flex justify-content-center py-5">
+            <div class="col-md-7 col-lg-7 d-flex justify-content-center py-5">
                 <div class="col-md-9 col-lg-8 mx-auto">      
-                    <slot/>
+                    <slot />
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6 image-container d-none d-md-block ">
+            <div class="col-md-5 col-lg-5 image-container d-none d-md-block ">
                 <div class="col-md-10 col-lg-9 mx-auto text-left py-5 ">
                     <h3 class="info mb-3 pt-5">Start your<br> <span class="cap">Capstone</span> Journey</h3>
                     <p class="info-p">Search for a supervisor in minutes.</p>
@@ -15,6 +15,7 @@
         </div>
     </div>
 </template>
+
 
 <style>
 

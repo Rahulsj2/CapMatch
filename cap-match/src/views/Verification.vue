@@ -12,6 +12,28 @@
     </div>
 </template>
 
+<script>
+export default {
+    name: "verifcation",
+    computed: {
+        getUser(){
+            return this.$store.getters.getUser;
+        }
+    },
+    methods: {
+        sendEmailVerification(){
+            this.$http.post(this.getUser._links.sendConfirmation.href).then(res=>{
+                if(res.status === 200){
+                    return res.status
+                }
+            })
+        }
+    },
+    mounted(){
+        this.sendEmailVerification();
+    }
+}
+</script>
 <style>
 
 

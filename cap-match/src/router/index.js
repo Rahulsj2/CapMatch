@@ -7,9 +7,9 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
-    meta: {layout: "onboarding"},
-    component: () => import("../views/Login.vue")
+    name: "Dashboard",
+    meta: {layout: "default"},
+    component: () => import("../views/Dashboard.vue"),
   },
   // {
   //   path: "/about",
@@ -26,13 +26,13 @@ const routes = [
     path: "/signup",
     name: "Signup",
     meta: {layout: "onboarding"},
-    component: () => import("../views/Signup.vue")
+    component: () => import("../views/Auth/Signup.vue")
   },
   {
     path: "/login",
     name: "Login",
     meta: {layout: "onboarding"},
-    component: () => import("../views/Login.vue")
+    component: () => import("../views/Auth/Login.vue")
   },
   {
     path: "/major",
@@ -45,6 +45,11 @@ const routes = [
     name: "Department",
     meta: {layout: "onboarding"},
     component: () => import("../views/Department.vue")
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("../views/Individual.vue")
   },
   {
     path: "/interests",
@@ -71,26 +76,15 @@ const routes = [
     component: () => import("../views/Resend.vue")
   },
   {
-    path: "/password_reset",
-    name: "PasswordReset",
+    path: "/confirmAccount",
+    name: "confirmAccount",
     meta: {layout: "onboarding"},
-    component: () => import("../views/PsswdReset.vue")
+    component: () => import("../views/ConfirmAccount.vue")
   },
   {
-    path: "/password_reset/1234",
-    name: "ChangePasswd",
-    meta: {layout: "onboarding"},
-    component: () => import("../views/ResetChangePasswd.vue")
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: () => import("../views/Dashboard.vue")
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: () => import("../views/Profile.vue")
+    path: "/profiles",
+    name: "Profiles",
+    component: () => import("../views/Profiles.vue")
   },
   {
     path: "/choices",
@@ -101,6 +95,18 @@ const routes = [
     path: "/match",
     name: "Match",
     component: () => import("../views/Match.vue")
+  },
+  {
+    path: "/password_reset",
+    name: "PasswordReset",
+    meta: {layout: "onboarding"},
+    component: () => import("../views/PsswdReset.vue")
+  },
+  {
+    path: "/password_reset/1234",
+    name: "ChangePasswd",
+    meta: {layout: "onboarding"},
+    component: () => import("../views/ResetChangePasswd.vue")
   },
   {
     path: "*",
