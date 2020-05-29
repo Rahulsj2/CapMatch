@@ -5,8 +5,25 @@
       <div class="sidebar-header">
        <img src="../assets/ashesi-logo-black.png" width="100">
       </div>
+      <ul class="list-unstyled components"  v-if="getUser.roles[0] === 'FACULTY' && getUser.roles[1] === 'ADMIN'" >
+        <li class="active">
+          <router-link to="/admin"><i class="fas fa-th-large"></i><br>Dashboard</router-link>
+        </li>
+        <li class="">
+          <router-link to="/facultyProfile"><i class="fas fa-chalkboard-teacher"></i><br>Faculty profiles</router-link>
+        </li>
+        <li class="">
+          <router-link to="/studentProfiles"><i class="fas fa-chalkboard-teacher"></i><br>Student profiles</router-link>
+        </li>
+        <li class="">
+          <router-link to="/choices"><i class="fas fa-heart"></i><br>My top Choices</router-link>
+        </li>
+        <li class="">
+          <router-link to="/match"><i class="fas fa-user-friends"></i><br>Student matches</router-link>
+        </li>
+      </ul>
 
-      <ul class="list-unstyled components">
+      <ul class="list-unstyled components" v-if="getUser.roles[0] === 'STUDENT' && getUser.roles[1] === undefined">
         <li class="active">
           <router-link to="/"><i class="fas fa-th-large"></i><br>Dashboard</router-link>
         </li>
@@ -20,15 +37,29 @@
           <router-link to="/match"><i class="fas fa-user-friends"></i><br>Supervisor match</router-link>
         </li>
       </ul>
+
+      <ul class="list-unstyled components" v-if="getUser.roles[0] === 'FACULTY' && getUser.roles[1] === undefined ">
+        <li class="active">
+          <router-link to="/"><i class="fas fa-th-large"></i><br>Dashboard</router-link>
+        </li>
+        <li class="">
+          <router-link to="/profiles"><i class="fas fa-chalkboard-teacher"></i><br>Student profiles</router-link>
+        </li>
+        <li class="">
+          <router-link to="/choices"><i class="fas fa-heart"></i><br>My top Choices</router-link>
+        </li>
+        <li class="">
+          <router-link to="/match"><i class="fas fa-user-friends"></i><br>Supervisor match</router-link>
+        </li>
+      </ul>
     </nav>
 
     <div id="content">
-
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
            <div id="sidebarCollapse" class="btn btn-grey">
              <!-- <i class="fas fa-align-left"></i> -->
-             <span>Student</span>
+             <span>{{getUser.roles[0]}}</span>
            </div>
            <div class="col-lg-1">
                 <span href="#" class="btn circle-icon"></span>
@@ -42,6 +73,33 @@
   </div>
 
 </template>
+
+
+
+<script>
+
+export default {
+    name: "Profiles",
+    data: function(){
+        return {
+            // roles: []
+        }
+    },
+    computed: {
+        getUser(){
+            return this.$store.getters.getUser;
+        }
+    },
+    methods: {
+        // setRoles(){
+        //     this.roles = this.getUser.roles;
+        // }
+
+    }
+
+}
+</script>
+
 
 <style>
 

@@ -108,6 +108,13 @@ httpClient.interceptors.response.use(
             type: 'error',
           });
           break;
+        case 423:
+          Vue.prototype.$message({
+            showClose: true,
+            message: "Your account has been locked contact your administrator to reolve this issue.",
+            type: 'error',
+          });
+          break;
         case 500:
           Vue.prototype.$message({
             showClose: true,

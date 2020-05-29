@@ -11,6 +11,12 @@ const routes = [
     meta: {layout: "default"},
     component: () => import("../views/Dashboard.vue"),
   },
+  {
+    path: "/admin",
+    name: "AdminDashboard",
+    meta: {layout: "default"},
+    component: () => import("../views/AdminDashboard.vue"),
+  },
   // {
   //   path: "/about",
   //   name: "About",
@@ -50,6 +56,16 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: () => import("../views/Individual.vue")
+  },
+  {
+    path: "/studentProfiles",
+    name: "StudentProfile",
+    component: () => import("../views/AdminBrowseStudent.vue")
+  },
+  {
+    path: "/facultyProfile",
+    name: "FacutlyProfile",
+    component: () => import("../views/AdminBrowseFaculty.vue")
   },
   {
     path: "/interests",

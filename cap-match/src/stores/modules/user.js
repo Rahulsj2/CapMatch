@@ -25,7 +25,7 @@ export default{
             return state.user;
         },
         getToken (state){
-            return state.user;
+            return state.token;
         }
     },
     mutations: {
@@ -52,12 +52,14 @@ export default{
             // console.log(token)
             Vue.prototype.$http.post('/login/startsession',"", {headers:{'Authorization': token}}).then(res=>{
                 if (res.status === 200){
+                    commit("changeToken",res.headers.x_auth_token);
                     Vue.prototype.$http.defaults.headers.common['x_auth_token'] = res.headers.x_auth_token
                 }
             })
         },
         LOGIN: ( {dispatch}, payload) => {
-            return Vue.prototype.$http.post('/login', payload).then((response) => {
+            return Vue.prototype.$http.post('/login', payload)
+            .then((response) => {
                 if (response.status === 200){
                     // console.log(response.data._links.addInterests.href);
                     dispatch("AuthToken",response);   

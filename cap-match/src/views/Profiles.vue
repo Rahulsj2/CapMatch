@@ -2,38 +2,82 @@
     <div class="container text-left">
         <h2>Faculty Profiles</h2>
         <div class="row mt-4 pt-4">
-            <div class="col-sm-4 my-3">
+            <div class="col-sm-4 my-3" v-for="profile in profiles" :key="profile.id">
                 <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <router-link to="/profile" class="card-title">David Ebo Adjepon-Yamoah</router-link>
-                        </div>
-                        <div class="col-lg-2">
-                            <i class="icon fa fa-check square-icon"></i>
-                        </div>
-                    </div>
-                    <p class="card-text">Computer Science and Information Systems</p>
-                     <div class="row">
-                        <div class="col-lg-3">
-                            <span href="#" class="btn circle-icon"></span>
-                        </div>
-                        <div class="col-lg-8">
-                            <div  class="btn btn-green mt-2">
-                                <!-- <i class="fas fa-align-left"></i> -->
-                                <span>Suggested</span>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <router-link to="/profile" class="card-title">{{profile.firstname + " " + profile.lastname}}</router-link>
+                            </div>
+                            <div class="col-lg-2">
+                                <i class="icon fa fa-check square-icon"></i>
                             </div>
                         </div>
-                    </div>
+                        <p class="card-text">{{profile.department}}</p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <span href="#" class="btn circle-icon"></span>
+                            </div>
+                            <div class="col-lg-8">
+                                <div  class="btn btn-green mt-2">
+                                    <!-- <i class="fas fa-align-left"></i> -->
+                                    <span>Suggested</span>
+                                </div>
+                            </div>
+                        </div>
+                        
                     
-                   
-                </div>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 </template>
+
+<script>
+
+export default {
+    name: "Profiles",
+    data: function(){
+        return {
+            profiles: [],
+        }
+    },
+    computed: {
+        getUser(){
+            return this.$store.getters.getUser;
+        }
+    },
+    methods: {
+        getProfiles(){
+            // const roles = this.getUser.roles;
+            console.log(this.getUser.roles.includes("STUDENT"))
+            if(this.getUser.roles.includes("STUDENT")){
+                this.$http.get(this.getUser._links.browseFaculty.href).then(res =>{
+                    if(res.status === 200){
+                        this.profiles = res.data._embedded.faculties
+                        // console.log(this.profiles)
+                    }
+                })
+            }
+            else if(this.getUser.roles.includes("FACULTY")){
+                this.$http.get(this.getUser._links.browseStudent.href).then(res =>{
+                    if(res.status === 200){
+                        this.profiles = res.data._embedded.students
+                    }
+                })
+            }
+        }
+
+    },
+    mounted(){
+        this.getProfiles();
+    }
+
+}
+</script>
+
 
 <style>
 .btn-wine{

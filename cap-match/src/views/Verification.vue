@@ -3,7 +3,7 @@
         <div class="py-5 my-4">
             <h4 class="header">Thanks&#33; You’re almost there.</h4>
             <img class="py-4" src="../assets/emailsent.svg" width="150">
-            <p class="desc">We’ve sent a confirmation email to <br> <b class="bold-color">rahulsrinivas@ashesi.edu.gh</b> </p>
+            <p class="desc">We’ve sent a confirmation email to <br> <b class="bold-color">{{getUser.email}}</b> </p>
        </div>
 
         <div class="onboard-footer text-center">
@@ -18,6 +18,9 @@ export default {
     computed: {
         getUser(){
             return this.$store.getters.getUser;
+        },
+        getToken(){
+            return this.$store.getters.getToken;
         }
     },
     methods: {

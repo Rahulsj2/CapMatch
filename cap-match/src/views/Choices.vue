@@ -1,6 +1,6 @@
 <template>
     <div class="container text-center">
-        <h2>Hello Someone</h2>
+        <h2>Hello {{getUser.firstname}}</h2>
         <p>
             Get Started on your capstone journey
         </p>
@@ -17,6 +17,23 @@
         </div>
     </div>
 </template>
+
+<script>
+
+export default {
+    name: "match",
+    data: function(){
+        return {
+            matches: [],
+        }
+    },
+    computed: {
+        getUser(){
+            return this.$store.getters.getUser;
+        }
+    }
+}
+</script>
 
 <style>
 .btn-wine{

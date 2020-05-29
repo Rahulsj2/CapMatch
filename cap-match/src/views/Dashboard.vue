@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h2>Hello Someone</h2>
+        <h2>Hello {{getUser.firstname}}</h2>
         <p>
             Get Started on your capstone journey
         </p>
@@ -9,7 +9,7 @@
                 <div class="card">
                 <div class="card-body">
                     <img class="my-3" src="../assets/gift.svg" width="300">
-                    <p class="card-text my-3">Look like you Top Choices <br> list is emapty</p>
+                    <p class="card-text my-3">Look like you Top Choices <br> list is empty</p>
                     <router-link to="/profiles" class="btn btn-wine my-4">Find Faculty</router-link>
                 </div>
                 </div>
@@ -24,6 +24,24 @@
         </div>
     </div>
 </template>
+
+<script>
+
+export default {
+    name: "match",
+    data: function(){
+        return {
+            matches: [],
+        }
+    },
+    computed: {
+        getUser(){
+            return this.$store.getters.getUser;
+        }
+    }
+}
+</script>
+
 
 <style>
 .btn-wine{

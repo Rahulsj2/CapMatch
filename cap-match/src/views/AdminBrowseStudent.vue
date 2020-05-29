@@ -1,19 +1,19 @@
 <template>
     <div class="container text-left">
-        <h2> Matches</h2>
+        <h2>Student Profiles</h2>
         <div class="row mt-4 pt-4">
-            <div class="col-sm-4 my-3" v-for="match in matches" :key="match.id">
+            <div class="col-sm-4 my-3" v-for="profile in profiles" :key="profile.id">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-10">
-                                <router-link to="/profile" class="card-title">{{match.firstname + " " + match.lastname}}</router-link>
+                                <router-link to="/profile" class="card-title">{{profile.firstname + " " + profile.lastname}}</router-link>
                             </div>
                             <div class="col-lg-2">
                                 <i class="icon fa fa-check square-icon"></i>
                             </div>
                         </div>
-                        <p class="card-text">{{match.department}}</p>
+                        <p class="card-text">{{profile.department}}</p>
                         <div class="row">
                             <div class="col-lg-3">
                                 <span href="#" class="btn circle-icon"></span>
@@ -38,10 +38,10 @@
 <script>
 
 export default {
-    name: "match",
+    name: "Profiles",
     data: function(){
         return {
-            matches: [],
+            profiles: [],
         }
     },
     computed: {
@@ -50,21 +50,11 @@ export default {
         }
     },
     methods: {
-        getMatches(){
-            console.log(this.getUser.roles.includes("STUDENT"))
-            if(this.getUser.roles.includes("STUDENT")){
-                this.$http.get(this.getUser._links.supervisor.href).then(res =>{
+        getProfiles(){
+            if(this.getUser.roles.includes("FACULTY")){
+                this.$http.get(this.getUser._links.browseStudent.href).then(res =>{
                     if(res.status === 200){
-                        this.matches = res.data
-                    }
-                })
-            }
-            else if(this.getUser.roles.includes("FACULTY")){
-                // console.log("we move......")
-                this.$http.get(this.getUser._links.supervisedStudents.href).then(res =>{
-                    if(res.status === 200){
-                        this.matches = res.data._embedded.students
-                        // console.log(res.data._embedded.students)
+                        this.profiles = res.data._embedded.students
                     }
                 })
             }
@@ -72,7 +62,7 @@ export default {
 
     },
     mounted(){
-        this.getMatches();
+        this.getProfiles();
     }
 
 }

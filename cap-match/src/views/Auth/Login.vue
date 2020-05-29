@@ -58,7 +58,10 @@ export default {
             })
             .then(success => {
                 if(success){
-                    if (this.getUser.accountStatus === "ACTIVE"){
+                    if(this.getUser.accountStatus === "ACTIVE" && this.getUser.roles[1] === "ADMIN"){
+                        this.$router.push("/admin")
+                    }
+                    else if (this.getUser.accountStatus === "ACTIVE" && this.getUser.roles[0] === "STUDENT" || this.getUser.roles[0] === "FACULTY"){
                         this.$router.push("/")
                     }
                     else if (this.getUser.accountStatus === "UNVERIFIED"){
