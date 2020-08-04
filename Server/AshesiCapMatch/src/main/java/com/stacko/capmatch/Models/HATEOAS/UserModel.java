@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import com.stacko.capmatch.Models.Faculty;
 import com.stacko.capmatch.Models.Student;
@@ -15,43 +16,44 @@ import com.stacko.capmatch.Security.UserPermission;
 
 import lombok.Getter;
 
+@Relation(collectionRelation = "users", itemRelation = "user")
 public class UserModel extends RepresentationModel<UserModel> implements Comparable<UserModel> {
 	
 	@Getter
-	private int userId;
+	protected int userId;
 	
 	@Getter
-	private String firstname;
+	protected String firstname;
 	
 	@Getter
-	private String lastname;
+	protected String lastname;
 	
 	@Getter
-	private String email;
+	protected String email;
 	
 	@Getter
-	private String password;
+	protected String password;
 	
 	@Getter
-	private String bio;
+	protected String bio;
 	
 	@Getter
-	private AccountStatus accountStatus;
+	protected AccountStatus accountStatus;
 	
 	@Getter
-	private Date registrationDate;
+	protected Date registrationDate;
 	
 //	@Getter
 //	private Set<UserPermissionModel> permissions;
 	
 	@Getter
-	private Set<User.Role> roles;
+	protected Set<User.Role> roles;
 	
 	@Getter
-	private String department;
+	protected String department;
 	
 	@Getter
-	private String major;
+	protected String major;
 	
 	
 	public UserModel(User user) {
@@ -71,6 +73,7 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 		
 		try {		// Try casting to student
 			this.major = ((Student) user).getMajor().getName();
+			this.department = ((Student) user).getMajor().getDepartment().getName();
 		}catch (Exception e) {
 			try { // if that fails, try casting to faculty
 				this.department = ((Faculty) user).getDepartment().getName();
@@ -157,7 +160,4 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 			return -20;
 		return this.getEmail().compareTo(o.getEmail());
 	}
-	
-	
-
 }

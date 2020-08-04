@@ -1,8 +1,8 @@
 package com.stacko.capmatch.Models;
 
 import java.io.Serializable;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderColumn;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -42,7 +43,8 @@ public class Student extends User implements Serializable {
 	@JoinTable(name="student_faculty",
 				joinColumns = { @JoinColumn(name = "fk_student") },
 				inverseJoinColumns = { @JoinColumn(name = "fk_faculty") })
-    private Set<Faculty> favouriteSupervisors = new TreeSet<>();
+	@OrderColumn
+    private List<Faculty> favouriteSupervisors = new ArrayList<>();
 	
 	
 	/**

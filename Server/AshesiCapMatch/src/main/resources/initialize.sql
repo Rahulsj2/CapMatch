@@ -27,6 +27,15 @@ INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Build the next
 INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Create tools to aid software design and implementation', 'Software Engineering');
 INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Connect every device to a single ecosystem', 'Internet of Things');
 INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Build mobile apps fast and reliably', 'Mobile App Development');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('From stock markets to banking, if it\'s about money I love it.', 'Finance');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Helping to improve educational infrustructure and curriculum', 'Education');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Anything tech and I\'m in.', 'Technology');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Create innovation that drive agricultural growth for the future', 'Agriculture');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Popular culture, fashion, food, people.', 'Lifestyle');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Create user expriences that improve how we consume technology today', 'Human-Computer Interaction');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('The world is interconnected. I want to work on creating infrustrucure that accelerates the push to connect the entire world', 'Networks');
+INSERT INTO `stack-o`.`interest` (`description`, `name`) VALUES ('Make computers smarter', 'Artificial Intelligence');
+
 
 
 --  Add SDGs --

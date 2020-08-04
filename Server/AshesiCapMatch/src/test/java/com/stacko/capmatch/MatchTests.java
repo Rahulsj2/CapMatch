@@ -16,6 +16,7 @@ import com.stacko.capmatch.Models.Interest;
 import com.stacko.capmatch.Models.Major;
 import com.stacko.capmatch.Models.SDG;
 import com.stacko.capmatch.Models.Student;
+import com.stacko.capmatch.Models.User;
 import com.stacko.capmatch.Repositories.DepartmentRepository;
 import com.stacko.capmatch.Repositories.FacultyRepository;
 import com.stacko.capmatch.Repositories.InterestRepository;
@@ -160,14 +161,15 @@ class MatchTests {
 		String password1 = "wtfiswrongWithyou";
 		int menteeLimit = 1;		
 		Faculty faculty1 = new Faculty(firstname1, lastname1, email1, password1, menteeLimit);
-		
+		faculty1.setAccountStatus(User.AccountStatus.ACTIVE);
 		
 		String firstname2 = "Owusu-Banahene";
 		String lastname2 = "Osei";
 		String email2 = "bana@gmail.com";
 		String password2 = "password98";		
 		Faculty faculty2 = new Faculty(firstname2, lastname2, email2, password2, menteeLimit);
-				
+		faculty2.setAccountStatus(User.AccountStatus.ACTIVE);
+		
 		department.addFaculty(faculty1);
 		department.addFaculty(faculty2);
 		
@@ -192,6 +194,7 @@ class MatchTests {
 		String student_password1 = "password98";		
 		Student student1 = new Student(student_firstname1, student_lastname1, student_email1, student_password1);		
 		student1.bidirectionalSetMajor(major1);
+		student1.setAccountStatus(User.AccountStatus.ACTIVE);
 		
 		String student_firstname2 = "Adeapena";
 		String student_lastname2 = "Osei";
@@ -199,7 +202,8 @@ class MatchTests {
 		String student_password2 = "password98";		
 		Student student2 = new Student(student_firstname2, student_lastname2, student_email2, student_password2);
 		student2.bidirectionalSetMajor(major1);
-		
+		student2.setAccountStatus(User.AccountStatus.ACTIVE);
+
 		
 		student1.addInterest(interest1);
 		student1.addInterest(interest3);

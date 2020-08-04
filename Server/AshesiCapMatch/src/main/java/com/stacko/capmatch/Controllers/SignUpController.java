@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.stacko.capmatch.Models.Department;
 import com.stacko.capmatch.Models.Faculty;
 import com.stacko.capmatch.Models.Major;
+import com.stacko.capmatch.Models.RequestError;
 import com.stacko.capmatch.Models.Student;
 import com.stacko.capmatch.Models.User;
 import com.stacko.capmatch.Models.HATEOAS.UserModel;
 import com.stacko.capmatch.Models.HATEOAS.Assemblers.UserModelAssembler;
 import com.stacko.capmatch.Services.DataValidationService;
-import com.stacko.capmatch.Services.EmailService;
 import com.stacko.capmatch.Services.HATEOASService;
 import com.stacko.capmatch.Repositories.DepartmentRepository;
 import com.stacko.capmatch.Repositories.FacultyRepository;
@@ -87,6 +87,7 @@ public class SignUpController {
 	@Autowired
 	DataValidationService validationService;
 	
+	
 	/**
 	 * 
 	 * @param student
@@ -94,25 +95,22 @@ public class SignUpController {
 	 */
 	@PostMapping(path="/student", consumes={"application/json", "text/xml"})
 	public ResponseEntity<?> signUpStudent(@RequestBody Student student, HttpServletResponse res){
-		if (!dataValidation.isUserDetailsValid(student)) {
+		RequestError error = new RequestError();
+		if (!dataValidation.isUserDetailsValid(student, error)) {
 			System.err.println("Student tried to signup with invalid details");
-			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-		// Make email lowercase
-		student.setEmail(student.getEmail().toLowerCase());
-		
-		// Encrypt Password
-		String clientEncodedPass = student.getPassword();
-		student.setPassword(securityConfig
-								.encoder()
-									.encode(student.getPassword()));
+		String clientEncodedPass = student.getPassword();					// store for later use
+		prepUserForStorage(student);
 		
 		// Student must have a major
 		if (student.getMajor() == null) {
 			log.info("Student tried to signup without a major");
-			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-		}		
+			error.setMessage("Students must choose a major to signup");
+			return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 		// To Deal with hateoas not including Ids, use major code to find major and reassign
 		Major major = majorRepo.findByMajorCodeIgnoringCase(student.getMajor().getMajorCode());
 		if (major != null) {
@@ -127,7 +125,8 @@ public class SignUpController {
 		// Make sure user doesn't already exist
 		if (userRepo.findByEmailIgnoringCase(student.getEmail()) != null) {
 			log.info("Student [" + student.getEmail() + "] tried to create duplicate account");
-			return new ResponseEntity<>(null, HttpStatus.IM_USED);
+			error.setMessage("User with email '" + student.getEmail() + "' already exists. Login instead.");
+			return new ResponseEntity<>(error, HttpStatus.IM_USED);
 		}
 		
 		// If all checks out grant STUDENT permission and save student
@@ -142,8 +141,7 @@ public class SignUpController {
 		studentRepo.save(student);
 		
 		// Generate Account Confirmation Code
-		generateAccountConfirmationDetails(student);
-		
+		generateAccountConfirmationDetails(student);		
 		
 		// Create Login Profile Required for future logins
 		createLoginProfile(student);
@@ -154,8 +152,7 @@ public class SignUpController {
 													(student.getEmail(), clientEncodedPass));
 		
 		// Prep Return Object
-		UserModel model = (new UserModelAssembler()).toModel(student);
-		
+		UserModel model = (new UserModelAssembler()).toModel(student);		
 		hateoasService.addUserInteractionLinks(model);
 		hateoasService.addStudentInteractionLinks(model);
 		
@@ -170,23 +167,21 @@ public class SignUpController {
 	 * @return
 	 */
 	@PostMapping(path="/faculty", consumes={"application/json", "text/xml"})
-	public ResponseEntity<?> signupFaculty(@RequestBody Faculty faculty){
-		if (!dataValidation.isUserDetailsValid(faculty)) {
+	public ResponseEntity<?> signupFaculty(@RequestBody Faculty faculty, HttpServletResponse res){
+		RequestError error = new RequestError();
+		if (!dataValidation.isUserDetailsValid(faculty, error)) {
 			System.err.println("Faculty tried to signup with invalid details");
-			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-		// Make email lowercase
-		faculty.setEmail(faculty.getEmail().toLowerCase());
+		String clientEncodedPass = faculty.getPassword();			// kept for later reuse
+		prepUserForStorage(faculty);
 		
-		// Encrypt Password
-				faculty.setPassword(securityConfig
-										.encoder()
-											.encode(faculty.getPassword()));
 		
 		// Faculty must have a department
 		if (faculty.getDepartment() == null) {
 			log.info("Faculty with email '" + faculty.getEmail() + "' tried to signup without a department");
+			error.setMessage("Faculty must choose a department to signup");
 			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		}		
 		// To Deal with hateoas not including Ids, use department code to find department and reassign
@@ -203,6 +198,7 @@ public class SignUpController {
 		// Make sure user doesn't already exist
 		if (userRepo.findByEmailIgnoringCase(faculty.getEmail()) != null) {
 			log.info("Faculty [" + faculty.getEmail() + "] tried to create duplicate account");
+			error.setMessage("User with email '" + faculty.getEmail() + "' already exists. Login instead.");
 			return new ResponseEntity<>(null, HttpStatus.IM_USED);
 		}
 		
@@ -225,6 +221,11 @@ public class SignUpController {
 		
 		// Create Login Profile Required for future logins
 		createLoginProfile(faculty);
+		
+		// Add Authorization Header to Response
+		res.setHeader("Authorization", this.validationService
+												.composeAuthenticationHeaderValue
+													(faculty.getEmail(), clientEncodedPass));
 		
 		// Prep Return Object
 		UserModel model = (new UserModelAssembler()).toModel(faculty);
@@ -265,9 +266,27 @@ public class SignUpController {
 	
 	
 	
-	// -------------------------------------- Class Private Helper Methods -------------------------------------------
+	// -------------------------------------- Class Private Helper Methods -------------------------------------------		
 	
-	
+	/**
+	 * 
+	 * @param user
+	 */
+	private void prepUserForStorage(User user) {
+		if (user == null) return;
+		// Make email lower case
+		user.setEmail(user.getEmail().toLowerCase());
+		// Encrypt password
+		user.setPassword(securityConfig
+								.encoder()
+									.encode(user.getPassword()));
+		// Make names title case										// NOT DONE YET		
+	}
+
+	/**
+	 * 
+	 * @param user
+	 */
 	public void generateAccountConfirmationDetails(User user) {
 		// Generate Random 20 character String and encode it
 		byte[] array = new byte[20]; // length is bounded by 7
@@ -296,7 +315,10 @@ public class SignUpController {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @param user
+	 */
 	private void createLoginProfile(User user) {
 		if (user == null)
 			return;

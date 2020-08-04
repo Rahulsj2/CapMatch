@@ -19,8 +19,8 @@ public class SessionConfig extends AbstractHttpSessionApplicationInitializer {
 	
 	@Bean
 	public HeaderHttpSessionIdResolver httpSessionStrategy() {
-		return HeaderHttpSessionIdResolver.xAuthToken();
-//		return new HeaderHttpSessionIdResolver("SessionID");
+//		return HeaderHttpSessionIdResolver.xAuthToken();
+		return new HeaderHttpSessionIdResolver("x_auth_token");
 	}
 	
 	/**

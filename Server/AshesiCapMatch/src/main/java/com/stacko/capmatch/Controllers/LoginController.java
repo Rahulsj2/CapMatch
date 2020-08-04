@@ -30,6 +30,7 @@ import com.stacko.capmatch.Models.HATEOAS.Assemblers.UserModelAssembler;
 import com.stacko.capmatch.Repositories.FacultyRepository;
 import com.stacko.capmatch.Repositories.StudentRepository;
 import com.stacko.capmatch.Repositories.UserRepository;
+import com.stacko.capmatch.Security.UserPermission;
 import com.stacko.capmatch.Security.Login.LoginDetails;
 import com.stacko.capmatch.Security.Login.LoginProfile;
 import com.stacko.capmatch.Security.Login.LoginProfileRepository;
@@ -91,6 +92,9 @@ public class LoginController {
 		if (user == null)
 			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		
+		if (user.getAccountStatus().equals(User.AccountStatus.BLOCKED))
+			return new ResponseEntity<>(null, HttpStatus.LOCKED);					// If user account is blocked, return a response immediately
+		
 		// Add Authorization Header to Response
 		res.setHeader("Authorization", validationService
 											.composeAuthenticationHeaderValue
@@ -106,18 +110,32 @@ public class LoginController {
 				return new ResponseEntity<>(null, HttpStatus.LOCKED);
 			else 
 				return new ResponseEntity<>(model, HttpStatus.OK);
-		}else {																// If user is not a student, must be faculty
-			Faculty faculty = facultyRepo.findById(user.getUserId()).get();
+		}else {									// If user is not a student, must be faculty or in a more unlikely case neither. Just Admin
 			
-			UserModel model = (new UserModelAssembler()).toModel(faculty);
+			UserModel model;
+			if (facultyRepo.findById(user.getUserId()).isPresent()) {				// If this is a faculty, then treat login as faculty
+				Faculty faculty = facultyRepo.findById(user.getUserId()).get();
+				model = (new UserModelAssembler()).toModel(faculty);
+				hateoasService.addFacultyInteractionLinks(model);
+			} else {																// Otherwise, treat as generic user
+				model = (new UserModelAssembler()).toModel(user);
+			}
+			
 			hateoasService.addUserInteractionLinks(model);
-			hateoasService.addFacultyInteractionLinks(model);			
-			if (model.getAccountStatus().equals(User.AccountStatus.BLOCKED))
-				return new ResponseEntity<>(null, HttpStatus.LOCKED);					// Return null body as returning the model posed a security breach
-			else 
-				return new ResponseEntity<>(model, HttpStatus.OK);
+			
+
+			// Check for admin login
+			for (UserPermission permission : user.getPermissions()) {
+				if (permission.getName().equalsIgnoreCase("ADMIN")) {
+					hateoasService.addAdminInterractionLinks(model); 
+					break;
+				}
+			}
+			
+			return new ResponseEntity<>(model, HttpStatus.OK);
 		}
 	}
+	
 	
 	
 	/**

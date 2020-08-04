@@ -23,6 +23,8 @@ import com.stacko.capmatch.Repositories.InterestRepository;
 import com.stacko.capmatch.Repositories.SDGRepository;
 import com.stacko.capmatch.Repositories.UserRepository;
 import com.stacko.capmatch.Security.Login.LoginDetails;
+import com.stacko.capmatch.Security.Signup.Interests;
+import com.stacko.capmatch.Security.Signup.SDGs;
 import com.stacko.capmatch.Services.DataValidationService;
 import com.stacko.capmatch.Services.EmailService;
 
@@ -57,7 +59,8 @@ public class UserController {
 	
 	@PostMapping(path="/{userId}/addInterests")	
 	@PutMapping(path="/{userId}/addInterests")
-	public ResponseEntity<?> addInterests(@RequestBody Iterable<Interest> interests, @PathVariable int userId){
+	public ResponseEntity<?> addInterests(@RequestBody Interests body , @PathVariable int userId){
+		Iterable<Interest> interests = body.getInterests();
 		Iterator<Interest> iter = interests.iterator();
 		
 		User user = userRepo.findById(userId).get();
@@ -73,21 +76,7 @@ public class UserController {
 		
 		userRepo.save(user);
 		
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
-	}
-	
-	
-	@PostMapping(path="/{userId}/setInterests")	
-	@PutMapping(path="/{userId}/setInterests")
-	public ResponseEntity<?> setInterests(@RequestBody Iterable<Interest> interests, @PathVariable int userId){		
-		User user = userRepo.findById(userId).get();
-		if (user == null) {
-			log.error("Could not find user with id '" + userId + "' while trying to set intrests");
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		user.removeAllInterests();
-		userRepo.save(user);
-		return addInterests(interests, userId);
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
 	
@@ -112,7 +101,22 @@ public class UserController {
 		
 		userRepo.save(user);
 		
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(path="/{userId}/setInterests")	
+	@PutMapping(path="/{userId}/setInterests")
+	public ResponseEntity<?> setInterests(@RequestBody Interests body, @PathVariable int userId){
+		Iterable<Interest> interests = body.getInterests();
+		User user = userRepo.findById(userId).get();
+		if (user == null) {
+			log.error("Could not find user with id '" + userId + "' while trying to set intrests");
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		user.removeAllInterests();
+		userRepo.save(user);
+		return addInterests(new Interests(interests), userId);
 	}
 	
 	
@@ -121,7 +125,8 @@ public class UserController {
 	
 	@PostMapping(path="/{userId}/addSDGs")	
 	@PutMapping(path="/{userId}/addSDGs")
-	public ResponseEntity<?> addSDGs(@RequestBody Iterable<SDG> sdgs, @PathVariable int userId){
+	public ResponseEntity<?> addSDGs(@RequestBody SDGs body , @PathVariable int userId){
+		Iterable<SDG> sdgs = body.getSdgs();
 		Iterator<SDG> iter = sdgs.iterator();		
 		User user = userRepo.findById(userId).get();
 		
@@ -138,14 +143,15 @@ public class UserController {
 		}
 		
 		userRepo.save(user);		
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
 	
 	
 	@PostMapping(path="/{userId}/setSDGs")	
 	@PutMapping(path="/{userId}/setSDGs")
-	public ResponseEntity<?> setSDGs(@RequestBody Iterable<SDG> sdgs, @PathVariable int userId){
+	public ResponseEntity<?> setSDGs(@RequestBody SDGs body, @PathVariable int userId){
+		Iterable<SDG> sdgs = body.getSdgs();
 		User user = userRepo.findById(userId).get();		
 		if (user == null) {
 			log.error("Could not find user with id '" + userId + "' while trying to set SDGs");
@@ -154,7 +160,7 @@ public class UserController {
 		user.removeAllSDGs();				// Remove all SDGs
 		
 		userRepo.save(user);		
-		return addSDGs(sdgs, userId);
+		return addSDGs(new SDGs(sdgs), userId);
 	}
 	
 	
@@ -178,7 +184,7 @@ public class UserController {
 		}
 		
 		userRepo.save(user);		
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
 	
@@ -206,7 +212,7 @@ public class UserController {
 		boolean isSent = this.emailService.sendAccountConfirmationEmail(user);
 		
 		if (isSent)
-			return new ResponseEntity<>(null, HttpStatus.CREATED);
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		else
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -239,6 +245,11 @@ public class UserController {
 	
 	
 	
+	/**
+	 * 
+	 * @param details
+	 * @return
+	 */
 	@PostMapping(path="/sendConfirmation")
 	public ResponseEntity<?> sendConfirmationGivenEmail(@RequestBody LoginDetails details){
 		if (details.getEmail() == null) {				// If no email is provided
@@ -256,7 +267,7 @@ public class UserController {
 			
 			boolean isSent = this.emailService.sendAccountConfirmationEmail(user);			
 			if (isSent)
-				return new ResponseEntity<>(null, HttpStatus.CREATED);
+				return new ResponseEntity<>(null, HttpStatus.OK);
 			else
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
@@ -279,7 +290,7 @@ public class UserController {
 		boolean sent = this.emailService.sendPasswordResetEmail(user);
 		
 		if (sent)
-			return new ResponseEntity<>(null, HttpStatus.CREATED);
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		else
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

@@ -5,7 +5,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.stereotype.Service;
 
+import com.stacko.capmatch.Controllers.AdminController;
 import com.stacko.capmatch.Controllers.FacultyController;
+import com.stacko.capmatch.Controllers.LogoutController;
 import com.stacko.capmatch.Controllers.StudentController;
 import com.stacko.capmatch.Controllers.UserController;
 import com.stacko.capmatch.Models.Faculty;
@@ -32,6 +34,8 @@ public class HATEOASService {
 		model.add(linkTo(methodOn(UserController.class).addSDGs(null, model.getUserId())).withRel("addSDGs"));
 		model.add(linkTo(methodOn(UserController.class).addSDG(null, model.getUserId())).withRel("addSDG"));		
 		model.add(linkTo(methodOn(UserController.class).setSDGs(null, model.getUserId())).withRel("setSDGs"));
+		
+		model.add(linkTo(methodOn(LogoutController.class).logout(null)).withRel("logout"));
 
 
 		
@@ -56,15 +60,20 @@ public class HATEOASService {
 	}
 
 
-	public void addBrowsedFacultyLinks(UserModel model, Student student) {
-		
+	public void addBrowsedFacultyLinks(UserModel model, Student student) {		
 		model.add(linkTo(methodOn(StudentController.class).addFavouriteFaculty(model.getUserId(), null))
 					.withRel("addAsFavourite"));			
 	}
 	
 
 	public void addBrowsedStudentLinks(UserModel model, Faculty faculty) {
+		if (model != null)
 		model.add(linkTo(methodOn(FacultyController.class).addFavouriteStudent(model.getUserId(), null))
 					.withRel("addAsFavourite"));				
+	}
+
+
+	public void addAdminInterractionLinks(UserModel model) {
+		model.add(linkTo(methodOn(AdminController.class).intitiateAllDepartmentMatching()).withRel("initiateMatching"));	
 	}
 }

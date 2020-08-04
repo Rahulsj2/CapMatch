@@ -109,8 +109,8 @@ public class UserPermission implements GrantedAuthority, Comparable<UserPermissi
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (permissionId != other.permissionId)
-			return false;
+//		if (permissionId != other.permissionId)
+//			return false;
 		return true;
 	}
 

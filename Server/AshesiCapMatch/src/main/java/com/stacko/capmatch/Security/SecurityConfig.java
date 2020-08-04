@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http
 			.authorizeRequests()
-				.antMatchers("/loginProfiles/**", "/accountConfirmations/**", "/userPermissions/**", "/profile/**", "/users")
+				.antMatchers("/loginProfiles/**", "/accountConfirmations/**", "/userPermissions/**", "/profile/**", "/users", "/faculties")
 					.denyAll()				// Completely block off the above endpoints	
 					
 				.antMatchers("/students/browseFaculty")			// Students only end points
@@ -64,19 +64,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/faculties/browseStudents")
 					.hasAnyAuthority("FACULTY", "ADMIN")
 					
-				.antMatchers("/students", "/students/**", "/faculty", "/faculty/**")
+				.antMatchers("/students", "/students/**", "/faculties", "/faculties/**", "/users/**")
 					.authenticated()
 					
 				.antMatchers("/login/startsession", "/logout")
 					.authenticated()
 					
-				.antMatchers("/admin", "/administrator")
+				.antMatchers("/admin", "/admin/**", "/administrator")
 					.hasAuthority("ADMIN")
 					
 				.antMatchers("/users/changeEmail")
 					.authenticated()
 				
-				.antMatchers("/signup", "/signup/**", "/login", "login/**")
+				.antMatchers("/signup", "/signup/**", "/login", "/login/**")
 					.permitAll()					
 				.antMatchers("/", "/**")
 					.permitAll()

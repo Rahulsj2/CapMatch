@@ -27,6 +27,16 @@ INSERT INTO `interest` (`description`, `name`) VALUES ('Build the next generatio
 INSERT INTO `interest` (`description`, `name`) VALUES ('Create tools to aid software design and implementation', 'Software Engineering');
 INSERT INTO `interest` (`description`, `name`) VALUES ('Connect every device to a single ecosystem', 'Internet of Things');
 INSERT INTO `interest` (`description`, `name`) VALUES ('Build mobile apps fast and reliably', 'Mobile App Development');
+INSERT INTO `interest` (`description`, `name`) VALUES ('From stock markets to banking, if it\'s about money I love it.', 'Finance');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Helping to improve educational infrustructure and curriculum', 'Education');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Anything tech and I\'m in.', 'Technology');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Create innovation that drive agricultural growth for the future', 'Agriculture');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Popular culture, fashion, food, people.', 'Lifestyle');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Create user expriences that improve how we consume technology today', 'Human-Computer Interaction');
+INSERT INTO `interest` (`description`, `name`) VALUES ('The world is interconnected. I want to work on creating infrustrucure that accelerates the push to connect the entire world', 'Networks');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Make computers smarter than they currently are. Make them think like humans.', 'Artificial Intelligence');
+INSERT INTO `interest` (`description`, `name`) VALUES ('The world generates multitudes of data each day. Let\'s find some order in all that chaos.', 'Data Science');
+INSERT INTO `interest` (`description`, `name`) VALUES ('Research algorithmic improvements that will change they way we live and interract with technology.', 'Algorithm Design and Analysis');
 
 
 --  Add SDGs --
@@ -40,4 +50,11 @@ INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Energy should not b
 INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('We should all have access to a good job we can thrive on', 'Decent Work and Economic Growth', '8');
 INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Let\'s innovate', 'Infrustructure', '9');
 INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Let\'s give everyone a fair shot at life', 'Reduced Inequalities', '10');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Make cities and human settlements inclusive, safe, resilient and sustainable', 'Sustainable Cities and Communities', '11');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Ensure sustainable consumption and production patterns', 'Responsible Consumption and Production', '12');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Take urgent action to combat climate change and its impacts*', 'Climate Action', '13');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Conserverve and sustainably use the oceans, seas and marine resources for sustainable development', 'Life Below Water', '14');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forrests, combat desertification, and halt and reverse land degradation and halt biodiversity loss', 'Life on Land', '15');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institutions at all levels', 'Peace, Justice and Strong Institutions', '16');
+INSERT INTO `sdg` (`description`, `name`, `number`) VALUES ('Strengthen the means of implementation and revitalize the global partnership for sustainable development', 'Partnerships for the Goals', '17');
 

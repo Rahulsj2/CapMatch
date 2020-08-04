@@ -124,13 +124,18 @@ public class MatchService {
 		Set<Student> returnSet = new HashSet<>();
 		for (Set<Student> departnmentStudents: studentsInEachDepartment)
 			returnSet.addAll(departnmentStudents);
-		return returnSet;
+		return returnSet.stream()
+							.filter(student -> student.getAccountStatus().equals(User.AccountStatus.ACTIVE))
+							.collect(Collectors.toSet());
 	}
+	
 	
 	
 	private Map<Faculty, Matches> getFacultyMatchesMap(Department department){
 		Map<Faculty, Matches> returnMap = new HashMap<>();
 		for (Faculty faculty : department.getFaculty()) {
+			if (!faculty.getAccountStatus().equals(User.AccountStatus.ACTIVE))				// Skip non-active faculty accounts
+				continue;
 			returnMap.put(faculty, new Matches(faculty.getMenteeLimit()));			// create a matches object for each faculty
 			
 			System.err.println("\nAdded " + faculty.getName() + " to FacultyMatchMap.\t Map size: " + returnMap.size() + "\n");

@@ -40,7 +40,7 @@ public class Major implements Serializable {
 	
 	private final String name;
 	
-	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.REFRESH})
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.REFRESH}, fetch=FetchType.EAGER)
 	@JoinColumn(name="department_id")
 	private Department department;	
 	

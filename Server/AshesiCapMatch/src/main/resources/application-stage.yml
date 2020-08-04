@@ -23,23 +23,25 @@ spring:
     hibernate:
       ddl-auto: update         
   
-  
-#  mail:
-#    default-encoding: UTF-8
-#    host: smtp.mailtrap.io
-#    username: ca4036e29f3869
-#    password: 99cd580b1ee1cc
-#    port: 2525
-#    protocol: smtp
 
 # MailGun SMTP Config
+#  mail:
+#    default-encoding: UTF-8
+#    host: smtp.mailgun.org
+#    username: postmaster@sandbox8a4c7ef33b1a4337b4be72d55d55f55b.mailgun.org
+#    password: a6d2636d8efe6e7cbaf8d30349893c54-e5e67e3e-3909243d
+#    port: 587 
+#    protocol: smtp
+    
   mail:
     default-encoding: UTF-8
     host: smtp.mailgun.org
-    username: postmaster@sandbox8a4c7ef33b1a4337b4be72d55d55f55b.mailgun.org
-    password: a6d2636d8efe6e7cbaf8d30349893c54-e5e67e3e-3909243d
+    username: capmatch@mg.goldenmindsdaycare.com
+    password: c3e6d00b49433efaa3d2ff54e848e41b-7fba8a4e-b9b8a3cd
     port: 587 
     protocol: smtp
+    
+    
 
 
 # Add application configuration    

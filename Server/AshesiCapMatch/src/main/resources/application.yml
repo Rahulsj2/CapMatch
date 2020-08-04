@@ -2,7 +2,7 @@
 spring:
   profiles:
     active:
-    - stage
+    - dev
     
   mail:
     default-encoding: UTF-8
