@@ -37,7 +37,7 @@ spring:
     default-encoding: UTF-8
     host: smtp.mailgun.org
     username: capmatch@mg.goldenmindsdaycare.com
-    password: c3e6d00b49433efaa3d2ff54e848e41b-7fba8a4e-b9b8a3cd
+    password: 691645977943f500ba6eb3f4b3008a5f-f7d0b107-e6c6c9d4
     port: 587 
     protocol: smtp
     
