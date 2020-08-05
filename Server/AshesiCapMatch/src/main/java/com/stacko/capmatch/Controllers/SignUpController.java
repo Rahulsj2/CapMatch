@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stacko.capmatch.Configuration.AppConfig;
 import com.stacko.capmatch.Models.Department;
 import com.stacko.capmatch.Models.Faculty;
 import com.stacko.capmatch.Models.Major;
@@ -52,6 +53,9 @@ public class SignUpController {
 	private final int DEFAULT_NUM_OF_STUDENTS_PER_SUPERVISOR = 7;
 	
 	@Autowired
+	AppConfig configuration;
+	
+	@Autowired
 	private DataValidationService dataValidation;
 	
 	@Autowired
@@ -84,9 +88,6 @@ public class SignUpController {
 	@Autowired
 	HATEOASService hateoasService;
 	
-	@Autowired
-	DataValidationService validationService;
-	
 	
 	/**
 	 * 
@@ -104,7 +105,7 @@ public class SignUpController {
 		String clientEncodedPass = student.getPassword();					// store for later use
 		prepUserForStorage(student);
 		
-		// Student must have a major
+		// Students must have a major
 		if (student.getMajor() == null) {
 			log.info("Student tried to signup without a major");
 			error.setMessage("Students must choose a major to signup");
@@ -119,7 +120,8 @@ public class SignUpController {
 			log.warn("Cound not find major with majorCode " + 
 					student.getMajor().getMajorCode() + " while trying to register student with email '" +
 					student.getEmail() + "'");
-			return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
+			error.setMessage("Student major not found");
+			return new ResponseEntity<>(error, HttpStatus.FAILED_DEPENDENCY);
 		}
 		
 		// Make sure user doesn't already exist
@@ -135,7 +137,8 @@ public class SignUpController {
 			student.grantPermission(permission);
 		}else {
 			log.warn("Could not find STUDENT permission when trying to register student with email " + student.getEmail() + "!");
-			return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
+			error.setMessage("It's not you. It's us. We'll fix this. Try again later");
+			return new ResponseEntity<>(error, HttpStatus.FAILED_DEPENDENCY);
 		}
 		
 		studentRepo.save(student);
@@ -147,11 +150,11 @@ public class SignUpController {
 		createLoginProfile(student);
 		
 		// Add Authorization Header to Response
-		res.setHeader("Authorization", this.validationService
+		res.setHeader("Authorization", this.dataValidation
 												.composeAuthenticationHeaderValue
 													(student.getEmail(), clientEncodedPass));
 		
-		// Prep Return Object
+		// Prepare Return Object
 		UserModel model = (new UserModelAssembler()).toModel(student);		
 		hateoasService.addUserInteractionLinks(model);
 		hateoasService.addStudentInteractionLinks(model);
@@ -182,7 +185,7 @@ public class SignUpController {
 		if (faculty.getDepartment() == null) {
 			log.info("Faculty with email '" + faculty.getEmail() + "' tried to signup without a department");
 			error.setMessage("Faculty must choose a department to signup");
-			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
 		}		
 		// To Deal with hateoas not including Ids, use department code to find department and reassign
 		Department department = departmentRepo.findByDepartmentCodeIgnoringCase(faculty.getDepartment().getDepartmentCode());
@@ -192,14 +195,15 @@ public class SignUpController {
 			log.warn("Could not find department with department code '" + 
 					faculty.getDepartment().getDepartmentCode() + "' while trying to register faculty with email '" +
 					faculty.getEmail() + "'");
-			return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
+			error.setMessage("Invalid department provided");
+			return new ResponseEntity<>(error, HttpStatus.FAILED_DEPENDENCY);
 		}
 		
 		// Make sure user doesn't already exist
 		if (userRepo.findByEmailIgnoringCase(faculty.getEmail()) != null) {
 			log.info("Faculty [" + faculty.getEmail() + "] tried to create duplicate account");
 			error.setMessage("User with email '" + faculty.getEmail() + "' already exists. Login instead.");
-			return new ResponseEntity<>(null, HttpStatus.IM_USED);
+			return new ResponseEntity<>(error, HttpStatus.IM_USED);
 		}
 		
 		// If all checks out grant FACULTY permission and save student
@@ -208,11 +212,11 @@ public class SignUpController {
 			faculty.grantPermission(permission);
 		}else {
 			log.warn("Could not find 'FACULTY' permission when registering faculty with email " + faculty.getEmail() + "!");
-			return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
-
+			error.setMessage("It's not you. It's us. We'll fix this. Try again later");
+			return new ResponseEntity<>(error, HttpStatus.FAILED_DEPENDENCY);
 		}
 		
-		faculty.setMenteeLimit(DEFAULT_NUM_OF_STUDENTS_PER_SUPERVISOR);
+		faculty.setMenteeLimit(configuration.getDefaultFacultyMenteeLimit());
 		
 		facultyRepo.save(faculty);
 		
@@ -223,7 +227,7 @@ public class SignUpController {
 		createLoginProfile(faculty);
 		
 		// Add Authorization Header to Response
-		res.setHeader("Authorization", this.validationService
+		res.setHeader("Authorization", this.dataValidation
 												.composeAuthenticationHeaderValue
 													(faculty.getEmail(), clientEncodedPass));
 		
@@ -240,14 +244,17 @@ public class SignUpController {
 	
 	@PostMapping("/confirm")
 	public ResponseEntity<?> confirmAccount(@RequestParam("confirmCode") String confirmationCode){
+		RequestError error = new RequestError();
 		// Get user with confirmation code
 		AccountConfirmation confirmationObject = this.accountConfirmationRepo.findByConfirmCode(confirmationCode);
 		if (confirmationObject == null)
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);			// Could not find confirmation object
 		
 		User user = confirmationObject.getUser();			
-		if (user == null)
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);	//if User is not found, then return not found response
+		if (user == null) {
+			error.setMessage("Confirmation code not found");
+			return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);	//if User is not found, then return not found response
+		}
 		
 		// Activate User Account
 		user.setAccountStatus(User.AccountStatus.ACTIVE);		
@@ -255,11 +262,12 @@ public class SignUpController {
 			userRepo.save(user);
 		}catch (Exception e) {
 			log.error("Could not authenticate user with email '" + user.getEmail() + "' because it could not be saved during confirmation ");
+			error.setMessage("It's not you. It's us. We'll fix this. Try again later");
+			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		// Remove authentication object
-		this.accountConfirmationRepo.deleteById(confirmationObject.getConfirmationId());
-		
+		this.accountConfirmationRepo.deleteById(confirmationObject.getConfirmationId());		
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
@@ -288,6 +296,30 @@ public class SignUpController {
 	 * @param user
 	 */
 	public void generateAccountConfirmationDetails(User user) {
+	    AccountConfirmation confirmationDetails = generateConfirmationDetails(user);	    
+	    try {
+		    confirmationDetails = accountConfirmationRepo.save(confirmationDetails);
+	    }catch(Exception e) {
+	    	// if saving fails, try a second time
+	    	try {
+	    		confirmationDetails = generateConfirmationDetails(user);	    		
+			    confirmationDetails = accountConfirmationRepo.save(confirmationDetails);
+		    }catch(Exception exc) {
+		    	log.error("Generating confirmation code for user '" + user.getEmail() + "' failed. This may be because"
+		    			+ " a confirmation code that already exists was generated. Becuase this is unlikely, code "
+		    			+ " base does not fully protect against it. Resolve immediatetely to enable user signup.");
+		    	return;
+		    }
+	    }
+	    
+	    if (confirmationDetails == null) {
+	    	log.error("Unable to store Account Confirmation details for user '" + user.getEmail() 
+	    				+	"' during signup or 'forgotPassword'");
+	    }
+	}
+	
+	
+	private AccountConfirmation generateConfirmationDetails(User user) {
 		// Generate Random 20 character String and encode it
 		byte[] array = new byte[20]; // length is bounded by 7
 	    new Random().nextBytes(array);
@@ -297,21 +329,8 @@ public class SignUpController {
 	    
 	    String encodedConfirmationString = passwordEncoder.encode(generatedString);			// Double Secure.... Encoded Randomness. AWESOME !!
 	    
-	    AccountConfirmation confirmationDetails = new AccountConfirmation(encodedConfirmationString, user);
-	    
-	    try {
-		    confirmationDetails = accountConfirmationRepo.save(confirmationDetails);
-	    }catch(Exception e) {
-	    	log.error("Generating confirmation code for user '" + user.getEmail() + "' failed. This may be because"
-	    			+ " a confirmation code that already exists was generated. Becuase this is unlikely, code "
-	    			+ " base does not fully protect against it. Resolve immediatetely to enable user signup.");
-	    	return;
-	    }
-	    
-	    if (confirmationDetails == null) {
-	    	log.error("Unable to store Account Confirmation details for user '" + user.getEmail() 
-	    				+	"' during signup or 'forgotPassword'");
-	    }
+	    AccountConfirmation confirmationDetails = new AccountConfirmation(encodedConfirmationString, user);	    
+	    return confirmationDetails;
 	}
 	
 	

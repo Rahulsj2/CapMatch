@@ -8,12 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.stacko.capmatch.Models.RequestError;
 import com.stacko.capmatch.Models.User;
-
+/***
+ * 
+ * @author Owusu-Banahene Osei
+ * 
+ * This class contains methods that help validate user input sent to the server
+ *
+ */
 @Service
 public class DataValidationService {
 	
 	private final int PASSWORD_MIN_LENGTH = 8;
 	private final int NAME_MAX_LENGTH = 25;
+	
 	
 	public boolean isUserDetailsValid(User user, RequestError error) {
 		// Firstly, none of the essential details should be absent
@@ -32,7 +39,7 @@ public class DataValidationService {
 		// Make sure a valid email address is provided
 		if (!isValidEmail(user.getEmail())) {
 			if (error != null)
-				error.setMessage("You must provide a valid Ashesi email");
+				error.setMessage("Provide a valid Ashesi email");
 			return false;
 		}
 		
