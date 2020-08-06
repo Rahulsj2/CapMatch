@@ -30,6 +30,7 @@ app:
     student-max-favourite-count: 3
     faculty-max-favourite-count: 4
     maximum-user-concurrent-sessions: 3
+    max-failed-login-attempts: 4
     
     
 client:

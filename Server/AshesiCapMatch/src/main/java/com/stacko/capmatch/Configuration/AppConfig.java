@@ -19,4 +19,6 @@ public class AppConfig {
 	private Integer maximumUserConcurrentSessions = 2;
 	
 	private Integer sessionIdleLifetime = 1800;
+	
+	private Integer maxFailedLoginAttempts = 4;
 }

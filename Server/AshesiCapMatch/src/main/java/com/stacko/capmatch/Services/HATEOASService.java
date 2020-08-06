@@ -26,6 +26,8 @@ public class HATEOASService {
 	 * @return
 	 */
 	public  void addUserInteractionLinks(UserModel model) {
+		if (model == null) return;
+		
 		// Users should be able to add to their interests
 		model.add(linkTo(methodOn(UserController.class).addInterests(null, model.getUserId())).withRel("addInterests"));
 		model.add(linkTo(methodOn(UserController.class).addInterest(null, model.getUserId())).withRel("addInterest"));
@@ -60,14 +62,17 @@ public class HATEOASService {
 	}
 
 
-	public void addBrowsedFacultyLinks(UserModel model, Student student) {		
+	public void addBrowsedFacultyLinks(UserModel model, Student student) {
+		if (model == null || student == null) return;
+
 		model.add(linkTo(methodOn(StudentController.class).addFavouriteFaculty(model.getUserId(), null))
 					.withRel("addAsFavourite"));			
 	}
 	
 
 	public void addBrowsedStudentLinks(UserModel model, Faculty faculty) {
-		if (model != null)
+		if (model == null || faculty == null) return;
+		
 		model.add(linkTo(methodOn(FacultyController.class).addFavouriteStudent(model.getUserId(), null))
 					.withRel("addAsFavourite"));				
 	}

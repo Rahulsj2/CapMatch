@@ -38,5 +38,10 @@
     "name": "app.config.session-idle-lifetime",
     "type": "java.lang.Integer",
     "description": "The maximum time a session can remain idle for before timeout in seconds"
+  },
+  {
+    "name": "app.config.max-failed-login-attempts",
+    "type": "java.lang.Integer",
+    "description": "The number of times a user can consecutively enter a wrong password at login before getting blocked"
   }
 ]}

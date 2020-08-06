@@ -49,9 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(path="/signup",produces={"application/json", "text/xml"})
 @CrossOrigin(origins="*")
 public class SignUpController {
-	
-	private final int DEFAULT_NUM_OF_STUDENTS_PER_SUPERVISOR = 7;
-	
+		
 	@Autowired
 	AppConfig configuration;
 	
