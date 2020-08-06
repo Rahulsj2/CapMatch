@@ -235,6 +235,10 @@ public class UserController {
 		if (!user.getAccountStatus().equals(User.AccountStatus.UNVERIFIED))
 			return new ResponseEntity<>(null, HttpStatus.PRECONDITION_FAILED);
 		
+		// Make sure the new email isn't already in use by another account
+		if (userRepo.findByEmailIgnoringCase(details.getEmail()) != null)
+			return new ResponseEntity<>(null, HttpStatus.IM_USED);
+		
 		user.setEmail(details.getEmail());
 		
 		userRepo.save(user);
