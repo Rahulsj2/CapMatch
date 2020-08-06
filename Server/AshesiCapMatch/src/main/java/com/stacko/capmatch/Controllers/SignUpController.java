@@ -4,6 +4,7 @@ package com.stacko.capmatch.Controllers;
 import java.nio.charset.Charset;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import com.stacko.capmatch.Repositories.UserRepository;
 import com.stacko.capmatch.Security.SecurityConfig;
 import com.stacko.capmatch.Security.UserPermission;
 import com.stacko.capmatch.Security.UserPermissionRepository;
+import com.stacko.capmatch.Security.Login.LoginDetails;
 import com.stacko.capmatch.Security.Login.LoginProfile;
 import com.stacko.capmatch.Security.Login.LoginProfileRepository;
 import com.stacko.capmatch.Security.Signup.AccountConfirmation;
@@ -86,6 +88,9 @@ public class SignUpController {
 	@Autowired
 	HATEOASService hateoasService;
 	
+	@Autowired
+	LoginController loginController;
+	
 	
 	/**
 	 * 
@@ -93,7 +98,7 @@ public class SignUpController {
 	 * @return
 	 */
 	@PostMapping(path="/student", consumes={"application/json", "text/xml"})
-	public ResponseEntity<?> signUpStudent(@RequestBody Student student, HttpServletResponse res){
+	public ResponseEntity<?> signUpStudent(@RequestBody Student student, HttpServletRequest req, HttpServletResponse res){
 		RequestError error = new RequestError();
 		if (!dataValidation.isUserDetailsValid(student, error)) {
 			System.err.println("Student tried to signup with invalid details");
@@ -152,6 +157,15 @@ public class SignUpController {
 												.composeAuthenticationHeaderValue
 													(student.getEmail(), clientEncodedPass));
 		
+		//Manually authenticate signed up in user
+		try {
+			loginController.manuallyAuthenticate(new LoginDetails(student.getEmail(), clientEncodedPass), req.getSession(true));
+			loginController.startUserSession(student, req.getSession(true));
+		} catch (Exception e) {
+			error.setMessage("It's not you. It's us. We'll fix this. Try again later");
+			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		// Prepare Return Object
 		UserModel model = (new UserModelAssembler()).toModel(student);		
 		hateoasService.addUserInteractionLinks(model);
@@ -168,7 +182,7 @@ public class SignUpController {
 	 * @return
 	 */
 	@PostMapping(path="/faculty", consumes={"application/json", "text/xml"})
-	public ResponseEntity<?> signupFaculty(@RequestBody Faculty faculty, HttpServletResponse res){
+	public ResponseEntity<?> signupFaculty(@RequestBody Faculty faculty, HttpServletRequest req, HttpServletResponse res){
 		RequestError error = new RequestError();
 		if (!dataValidation.isUserDetailsValid(faculty, error)) {
 			System.err.println("Faculty tried to signup with invalid details");
@@ -228,6 +242,15 @@ public class SignUpController {
 		res.setHeader("Authorization", this.dataValidation
 												.composeAuthenticationHeaderValue
 													(faculty.getEmail(), clientEncodedPass));
+		
+		//Manually authenticate signed up in user
+		try {
+			loginController.manuallyAuthenticate(new LoginDetails(faculty.getEmail(), clientEncodedPass), req.getSession(true));
+			loginController.startUserSession(faculty, req.getSession(true));
+		} catch (Exception e) {
+			error.setMessage("It's not you. It's us. We'll fix this. Try again later");
+			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 		// Prep Return Object
 		UserModel model = (new UserModelAssembler()).toModel(faculty);

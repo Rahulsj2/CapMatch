@@ -7,13 +7,20 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +39,7 @@ import com.stacko.capmatch.Models.HATEOAS.Assemblers.UserModelAssembler;
 import com.stacko.capmatch.Repositories.FacultyRepository;
 import com.stacko.capmatch.Repositories.StudentRepository;
 import com.stacko.capmatch.Repositories.UserRepository;
+import com.stacko.capmatch.Security.SecurityConfig;
 import com.stacko.capmatch.Security.UserPermission;
 import com.stacko.capmatch.Security.Login.LoginDetails;
 import com.stacko.capmatch.Security.Login.LoginProfile;
@@ -72,6 +80,9 @@ public class LoginController {
 	
 	@Autowired
 	AppConfig appConfig;
+	
+	@Autowired
+	SecurityConfig securityConfig;
 		
 	
 //	@GetMapping(consumes={"application/json", "text/xml", MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.ALL_VALUE})
@@ -119,9 +130,18 @@ public class LoginController {
 											.composeAuthenticationHeaderValue
 												(user.getEmail(), loginDetails.getPassword()));
 		
+		//Manually authenticate logged in user
+		try {
+			this.manuallyAuthenticate(loginDetails, req.getSession(true));
+			this.startUserSession(user, req.getSession(true));
+		} catch (Exception e) {
+			error.setMessage("It's not you. It's us. We'll fix this. Try again later");
+			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+		}	    
+	    		
 		UserModel model = prepareLoggedInUserForResponse(user);
 		return new ResponseEntity<>(model, HttpStatus.OK);
-	}
+	}	
 	
 	
 	/**
@@ -137,7 +157,7 @@ public class LoginController {
 		if (user == null) {
 			log.error(String.format("Could not start session for user with Principal name %s because a matching user"
 					+ "account could not be found", principal.getName()));
-			RequestError error = new RequestError("It's not you. It's use. We'll fix this. Try again later");
+			RequestError error = new RequestError("It's not you. It's us. We'll fix this. Try again later");
 			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -152,6 +172,60 @@ public class LoginController {
 	// ------------------------------------------------- Private Helper Methods ----------------------------------------------------	
 	
 	
+	/**
+	 * 
+	 * @param loginDetails
+	 * @param session
+	 * @throws Exception
+	 */
+	public void manuallyAuthenticate(@NotNull LoginDetails loginDetails, @NotNull HttpSession session) throws Exception {
+		UsernamePasswordAuthenticationToken authReq
+	      = new UsernamePasswordAuthenticationToken(loginDetails.getEmail(), loginDetails.getPassword());
+		
+		AuthenticationManager authManager;
+		try {
+			authManager = securityConfig.authenticationManagerBean();
+		} catch (Exception e) {
+			log.error(String.format("Manually authenticating user with email '%s' failed because there was a problem getting"
+					+ "the 'authenticationManagerBean' from the app SecurityConfig. \n\t StackTrace>> %s", 
+																	loginDetails.getEmail(), e.getStackTrace().toString()));
+			
+			e.printStackTrace();
+			throw new Exception();
+		}
+		Authentication auth = authManager.authenticate(authReq);	    
+	    SecurityContext sc = SecurityContextHolder.getContext();
+	    sc.setAuthentication(auth);
+	    session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+	}
+	
+	
+	/**
+	 * 
+	 * @param user
+	 * @param session
+	 * @throws Exception
+	 */
+	public void startUserSession(@NotNull User user, @NotNull HttpSession session) throws Exception {
+		if (user == null) {
+			log.error(String.format("Could not start session because a null object was parsed as user"
+					+ "whilst trying to start a session"));
+			throw new Exception();
+		}
+		
+		session.setMaxInactiveInterval(this.appConfig.getSessionIdleLifetime());
+		session.setAttribute("user", user);
+		
+		log.info("Starting new session for user '" + user.getName() + "'");		
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 */
 	private UserModel prepareLoggedInUserForResponse(User user) {
 		UserModel model;
 		if (studentRepo.findById(user.getUserId()).isPresent()) {			// If user is a student			
