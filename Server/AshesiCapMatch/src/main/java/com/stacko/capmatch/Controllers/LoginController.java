@@ -34,6 +34,7 @@ import com.stacko.capmatch.Models.RequestError;
 import com.stacko.capmatch.Models.Student;
 import com.stacko.capmatch.Models.User;
 import com.stacko.capmatch.Models.User.AccountStatus;
+import com.stacko.capmatch.Models.HATEOAS.LoggedInUserModel;
 import com.stacko.capmatch.Models.HATEOAS.UserModel;
 import com.stacko.capmatch.Models.HATEOAS.Assemblers.UserModelAssembler;
 import com.stacko.capmatch.Repositories.FacultyRepository;
@@ -139,7 +140,7 @@ public class LoginController {
 			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 		}	    
 	    		
-		UserModel model = prepareLoggedInUserForResponse(user);
+		LoggedInUserModel model = prepareLoggedInUserForResponse(user);
 		return new ResponseEntity<>(model, HttpStatus.OK);
 	}	
 	
@@ -226,7 +227,7 @@ public class LoginController {
 	 * @param user
 	 * @return
 	 */
-	private UserModel prepareLoggedInUserForResponse(User user) {
+	public LoggedInUserModel prepareLoggedInUserForResponse(User user) {
 		UserModel model;
 		if (studentRepo.findById(user.getUserId()).isPresent()) {			// If user is a student			
 			Student student = studentRepo.findById(user.getUserId()).get();
@@ -254,7 +255,10 @@ public class LoginController {
 		}
 		
 		hateoasService.addUserInteractionLinks(model);
-		return model;
+		
+		// LoggedInUserModel enables the addition of settings and all info needed by client to properly interface with server
+		LoggedInUserModel loggedInUser = new LoggedInUserModel(model, appConfig.getSessionIdleLifetime());
+		return loggedInUser;
 	}
 	
 	

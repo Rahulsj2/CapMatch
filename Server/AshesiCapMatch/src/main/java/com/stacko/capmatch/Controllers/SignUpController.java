@@ -167,11 +167,13 @@ public class SignUpController {
 		}
 		
 		// Prepare Return Object
-		UserModel model = (new UserModelAssembler()).toModel(student);		
-		hateoasService.addUserInteractionLinks(model);
-		hateoasService.addStudentInteractionLinks(model);
+//		UserModel model = (new UserModelAssembler()).toModel(student);		
+//		hateoasService.addUserInteractionLinks(model);
+//		hateoasService.addStudentInteractionLinks(model);
 		
-		return new ResponseEntity<>(model , HttpStatus.CREATED);		
+		// prepareLoggedInUser includes all needed setting such as sessionTimeout needed by client
+		return new ResponseEntity<>(loginController.prepareLoggedInUserForResponse(student),
+										HttpStatus.CREATED);		
 	}
 
 
