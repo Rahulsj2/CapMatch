@@ -20,7 +20,6 @@ public class StudentModel extends UserModel{
 		result = prime * result + ((firstname == null) ? 0 : firstname.hashCode());
 		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
 		result = prime * result + ((major == null) ? 0 : major.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + userId;
 		return result;
 	}
@@ -61,11 +60,6 @@ public class StudentModel extends UserModel{
 			if (other.major != null)
 				return false;
 		} else if (!major.equals(other.major))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
 			return false;
 		if (userId != other.userId)
 			return false;

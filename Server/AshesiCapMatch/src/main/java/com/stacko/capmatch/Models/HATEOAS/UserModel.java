@@ -32,9 +32,6 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 	protected String email;
 	
 	@Getter
-	protected String password;
-	
-	@Getter
 	protected String bio;
 	
 	@Getter
@@ -58,13 +55,13 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 	
 	public UserModel(User user) {
 		if (user == null)
-			throw new IllegalArgumentException("Cannot construct a user model from 'null'");
+			return;
+//			throw new IllegalArgumentException("Cannot construct a user model from 'null'");
 		
 		this.userId = user.getUserId();
 		this.firstname = user.getFirstname();
 		this.lastname = user.getLastname();
 		this.email = user.getEmail();
-		this.password = user.getPassword();
 		this.accountStatus = user.getAccountStatus();
 		this.registrationDate = user.getRegistrationDate();
 		this.bio = user.getBio();
@@ -112,7 +109,6 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 		result = prime * result + ((firstname == null) ? 0 : firstname.hashCode());
 		result = prime * result + userId;
 		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
 
@@ -144,11 +140,6 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 			if (other.lastname != null)
 				return false;
 		} else if (!lastname.equals(other.lastname))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
 			return false;
 		return true;
 	}
