@@ -8,6 +8,8 @@ import java.util.TreeSet;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
+import com.stacko.capmatch.Configuration.SpringContext;
+import com.stacko.capmatch.Configuration.StorageConfig;
 import com.stacko.capmatch.Models.Faculty;
 import com.stacko.capmatch.Models.Student;
 import com.stacko.capmatch.Models.User;
@@ -52,6 +54,12 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 	@Getter
 	protected String major;
 	
+	@Getter
+	protected String profilePhoto;
+	
+	@Getter
+	protected String cv;
+	
 	
 	public UserModel(User user) {
 		if (user == null)
@@ -67,6 +75,17 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 		this.bio = user.getBio();
 //		this.permissions = this.convertPermissionsToModels(user.getPermissions());
 		this.roles = assignRoles(user.getPermissions());
+		
+		// Media Filenames
+		this.profilePhoto = user.getProfilePhoto() == null ? 
+								null : String.format("%s/%s/%s", getStorageConfig().getRemoteStorageBasepath(),
+																getStorageConfig().getCVDirectory(),
+																user.getProfilePhoto());
+		this.cv = user.getCV() == null ?
+					null : String.format("%s/%s/%s", getStorageConfig().getRemoteStorageBasepath(),
+													getStorageConfig().getCVDirectory(),
+													user.getCV());
+		
 		
 		try {		// Try casting to student
 			this.major = ((Student) user).getMajor().getName();
@@ -151,4 +170,14 @@ public class UserModel extends RepresentationModel<UserModel> implements Compara
 			return -20;
 		return this.getEmail().compareTo(o.getEmail());
 	}
+	
+	
+	// ------------------------------------- Add helper methods to access Spring managed beans from this POJO ---------------------------------
+	/**
+	 * This method retrieves the StorageConfig Spring bean and makes it available in this POJO
+	 * @return
+	 */
+	private StorageConfig getStorageConfig() {
+        return SpringContext.getBean(StorageConfig.class);
+    }
 }

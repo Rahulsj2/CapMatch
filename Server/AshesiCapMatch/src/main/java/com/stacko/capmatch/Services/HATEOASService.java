@@ -40,6 +40,13 @@ public class HATEOASService {
 		model.add(linkTo(methodOn(LogoutController.class).logout(null)).withRel("logout"));
 
 
+		// Add Links for managing media such as CV and profile photo
+		model.add(linkTo(methodOn(UserController.class).setProfilePhoto(null, null)).withRel("setProfilePhoto"));
+		model.add(linkTo(methodOn(UserController.class).removeProfilePhoto(null)).withRel("removeProfilePhoto"));
+		model.add(linkTo(methodOn(UserController.class).setCV(null, null))
+					.withRel("setCV"));
+		model.add(linkTo(methodOn(UserController.class).removeCV(null))
+				.withRel("removeCV"));
 		
 		if (model.getAccountStatus().equals(User.AccountStatus.UNVERIFIED)) {
 			model.add(linkTo(methodOn(UserController.class).resendConfirmationMail(model.getUserId())).withRel("sendConfirmation"));

@@ -1,10 +1,14 @@
 package com.stacko.capmatch.Services;
 
 
+import java.io.IOException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.regex.Pattern;
 
+import org.apache.tika.Tika;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.stacko.capmatch.Models.RequestError;
 import com.stacko.capmatch.Models.User;
@@ -89,6 +93,79 @@ public class DataValidationService {
 	public String composeAuthenticationHeaderValue(String username, String password) {
 		String composedValue = username + ":" + password;
 		return "Basic " + Base64.getEncoder().encodeToString(composedValue.getBytes());
+	}
+	
+	
+	/**
+	 * 
+	 * @param user
+	 * @param fileType
+	 * @param fileFormat
+	 * @return
+	 */
+	public String generateFileName(User user, String fileType, String fileFormat) {
+		if (user == null || fileType == null || fileFormat == null) 
+			throw new IllegalArgumentException();
+		
+		return String.format("%s_%s_%s.%s", new Date().getTime(), user.getName(), fileType, fileFormat)
+					.replaceAll("\\s+", "");
+	}
+
+	
+
+	/**
+	 * 
+	 * @param file
+	 * @param error
+	 * @return
+	 */
+	public boolean isValidPhoto(MultipartFile file, RequestError error) {
+		if (file == null) return false;
+		
+		// check file type
+		Tika tika = new Tika();
+		String detectedType;
+		try {
+			detectedType = tika.detect(file.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+			if (error != null) error.setMessage("We could not validate your photo's format");
+			return false;
+		}
+				
+		if (!detectedType.equals("image/jpeg")) {					// Make sure file is in JPEG format
+			if (error != null) error.setMessage("Upload photo in JPEG format");
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * 
+	 * @param cv
+	 * @param error
+	 * @return
+	 */
+	public boolean isValidCV(MultipartFile cv, RequestError error) {
+		if (cv == null) return false;
+		
+		// check file type
+		Tika tika = new Tika();
+		String detectedType;
+		try {
+			detectedType = tika.detect(cv.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+			if (error != null) error.setMessage("We could not validate the your CV format");
+			return false;
+		}
+		
+		if (!"application/pdf".equals(detectedType)) {			// If file is not pdf format
+			if (error != null) error.setMessage("CV must be in PDF format");
+			return false;
+		}
+		return true;
 	}
 
 

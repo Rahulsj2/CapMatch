@@ -28,5 +28,11 @@ client:
       
 
 app:
+  storage:
+    config:
+      location: TODO
+      remote-storage-basepath: TODO
+      profile-photo-directory: TODO
+      c-v-directory: TODO
   config:
     session-idle-lifetime: 1800         # On the stage, sessions last 30 minutes when idle  

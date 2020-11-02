@@ -110,6 +110,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
+		
+		<!-- Apache Tika is only used as a robust way to check file types using file content not just names in this project -->
+		<dependency>		
+		    <groupId>org.apache.tika</groupId>
+		    <artifactId>tika-core</artifactId>
+		    <version>1.17</version>
+		  </dependency>
 	</dependencies>
 
 	<build>

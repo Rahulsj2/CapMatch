@@ -10,13 +10,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.stacko.capmatch.Models.Interest;
+import com.stacko.capmatch.Models.RequestError;
 import com.stacko.capmatch.Models.SDG;
 import com.stacko.capmatch.Models.User;
 import com.stacko.capmatch.Repositories.InterestRepository;
@@ -27,6 +33,7 @@ import com.stacko.capmatch.Security.Signup.Interests;
 import com.stacko.capmatch.Security.Signup.SDGs;
 import com.stacko.capmatch.Services.DataValidationService;
 import com.stacko.capmatch.Services.EmailService;
+import com.stacko.capmatch.Services.StorageService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,6 +61,9 @@ public class UserController {
 	
 	@Autowired
 	DataValidationService validationService;
+	
+	@Autowired
+	StorageService storageService;
 	
 	// -----------------------------------------------Interest Stuff ------------------------------------------------------
 	
@@ -186,6 +196,124 @@ public class UserController {
 		userRepo.save(user);		
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
+	
+	
+	// --------------------------------- File/Document End-points --------------------------
+	/**
+	 * 
+	 * @param file
+	 * @param req
+	 * @return
+	 */
+	@PostMapping(path="/profile/photo")
+	@ResponseBody
+	public ResponseEntity<?> setProfilePhoto(@RequestBody MultipartFile file,
+			HttpServletRequest req) {		
+		if (file == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		
+		RequestError error = new RequestError();
+		
+		if (!this.validationService.isValidPhoto(file, error)) 			// Validate photo file
+			return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+			
+		
+		User user = userRepo.findByEmailIgnoringCase(req.getUserPrincipal().getName());
+		if (user == null) {
+			log.error("Could not set Profile photo for user '" + req.getUserPrincipal().getName() + 
+						"' because getting corresponding user object from repo failed");
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);		
+		}
+		
+		if (user.getProfilePhoto() != null)				// If photo already set then delete old photo
+			storageService.removeProfilePhoto(user);
+			
+		storageService.storeProfilePhoto(file, user);
+//		storageService.store(file);
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+		
+	
+	
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@PostMapping(path="profile/remove/photo")
+	//@DeleteMapping(path="profile/remove/photo")
+	public ResponseEntity<?> removeProfilePhoto(HttpServletRequest req){				
+		
+		User user = userRepo.findByEmailIgnoringCase(req.getUserPrincipal().getName());
+		if (user == null) {
+			log.error("Could not remove Photo for user '" + req.getUserPrincipal().getName() + 
+						"' because getting corresponding user object from repo failed");
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);		
+		}
+			
+		storageService.removeProfilePhoto(user);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param cv
+	 * @param req
+	 * @return
+	 */
+	@PostMapping(path="/profile/cv")
+	public ResponseEntity<?> setCV(@RequestBody MultipartFile file,
+			HttpServletRequest req) {		
+		if (file == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		
+		RequestError error = new RequestError();
+		
+		if (!this.validationService.isValidCV(file, error)) 			// Validate photo file
+			return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+			
+		User user = userRepo.findByEmailIgnoringCase(req.getUserPrincipal().getName());
+		if (user == null) {
+			log.error("Could not set Profile photo for user '" + req.getUserPrincipal().getName() + 
+						"' because getting corresponding user object from repo failed");
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);		
+		}
+		
+		if (user.getProfilePhoto() != null)				// If photo already set then delete old photo
+			storageService.removeCV(user);
+			
+		storageService.storeCV(file, user);
+
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@PostMapping(path="profile/remove/cv")
+	//@DeleteMapping(path="profile/cv")
+	public ResponseEntity<?> removeCV(HttpServletRequest req){				
+		
+		User user = userRepo.findByEmailIgnoringCase(req.getUserPrincipal().getName());
+		if (user == null) {
+			log.error("Could not remove CV for user '" + req.getUserPrincipal().getName() + 
+						"' because getting corresponding user object from repo failed");
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);		
+		}
+			
+		storageService.removeCV(user);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+
+	
+	// ------------------------------End of File/Document End-points --------------------------------------------------
+	
+	
 	
 	
 	

@@ -1,4 +1,3 @@
-
 spring:
   profiles:
     active:
@@ -23,8 +22,15 @@ spring:
     
 
 
- # Add application configuration      session:    timeout: 30m        #session timeout after 30 minutes 
+ # Add application configuration      session:    timeout: 30m        #session timeout after 30 minutes   servlet:    multipart:      max-file-size: 2MB      max-request-size: 2MB
+      
+      
+
+
 app:
+#  storage:
+#    config:
+#      location: C:\Users\banah\Desktop\Mock_Store
   config:
     default-faculty-menteeLimit: 10
     student-max-favourite-count: 3

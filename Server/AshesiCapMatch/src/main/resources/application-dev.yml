@@ -34,8 +34,7 @@ client:
     routes:
       base-path: http://localhost:8080    
     
-    
-app:
+app:  storage:    config:      location: C:\\Users\\banah\\Desktop\\Mock_Store      remote-storage-basepath: file:///C:/Users/banah/Desktop/Mock_Store      profile-photo-directory: "ProfilePhotos"      c-v-directory: "CVs"      
   config:
     session-idle-lifetime: 1200      
       

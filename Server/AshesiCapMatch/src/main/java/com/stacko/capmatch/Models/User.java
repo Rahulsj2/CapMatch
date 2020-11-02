@@ -97,6 +97,15 @@ public class User implements UserDetails, Comparable<User>, Serializable {
 	protected Set<SDG> SDGs = new TreeSet<>();
 	
 	
+	
+	@Column(nullable=true)
+	private String profilePhoto;
+	
+	
+	@Column(nullable=true)
+	private String CV;
+	
+	
 	/**
 	 * This is the class constructor
 	 * 

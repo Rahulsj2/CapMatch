@@ -22,6 +22,8 @@ public class LoggedInUserModel extends UserModel {
 		this.roles = model.getRoles();
 		this.department = model.getDepartment();
 		this.major = model.getMajor();
+		this.profilePhoto = model.getProfilePhoto();
+		this.cv = model.getCv();
 		
 		this.add(model.getLinks());
 		
